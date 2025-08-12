@@ -8,6 +8,4 @@ async function conectar(){
     console.log('Conectado ao MongoDB!');
 }
 
-conectar();
-
-export default mongoose;
+export { conectar} ;

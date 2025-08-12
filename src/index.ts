@@ -1,8 +1,8 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
+import { conectar } from './database/mongo'
 
 dotenv.config();
 
@@ -13,13 +13,8 @@ app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 3333;
 
-app.get('/', (req, res) => {
-  res.send('API de idosos rodando');
-});
-
-mongoose.connect(process.env.MONGO_URI as string)
+conectar()
   .then(() => {
-    console.log('Conectado ao MongoDB');
     app.listen(PORT, () => {
       console.log(`Servidor rodando em http://localhost:${PORT}`);
     });

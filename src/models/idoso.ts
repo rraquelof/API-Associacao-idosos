@@ -1,6 +1,7 @@
-import mongoose from '../database/mongo';
+import mongoose, { Schema, Document } from "mongoose";
 
-export interface IIdoso {
+
+export interface IIdoso extends Document {
     nome: string,
     cpf: string,
     rg: string,
@@ -11,7 +12,7 @@ export interface IIdoso {
     naturalidade: string
 }
 
-const idosoSchema = new mongoose.Schema({
+const idosoSchema: Schema = new Schema({
     nome: {type: String, required: true},
     cpf: {type: String, required: true, unique: true},
     rg: {type: String, required: true, unique: true},
