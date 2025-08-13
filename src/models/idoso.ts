@@ -17,7 +17,7 @@ const idosoSchema: Schema = new Schema({
     cpf: {type: String, required: true, unique: true},
     rg: {type: String, required: true, unique: true},
     sus: {type: String, required: true, unique: true},
-    data_nascimeento: {type: Date, required: true},
+    data_nascimento: {type: Date, required: true},
     sexo: {type: String, required: true},
     nacionalidade: {type: String, required: true},
     naturalidade: {type: String, required: true}
