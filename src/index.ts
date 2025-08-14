@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
 import idosoRoutes from './routes/idosoRoutes'
+import eventoRoutes from './routes/eventoRoutes';
 import { conectar } from './database/mongo'
 
 dotenv.config();
@@ -10,7 +11,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use('/api', userRoutes, idosoRoutes);
+app.use('/api', userRoutes, idosoRoutes, eventoRoutes);
 
 const PORT = process.env.PORT || 3333;
 
