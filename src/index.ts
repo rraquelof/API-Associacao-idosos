@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
 import idosoRoutes from './routes/idosoRoutes'
 import eventoRoutes from './routes/eventoRoutes';
-import { conectar } from './database/mongo'
+import { conectar } from './database/mongo';
+import { errorHandler } from './middlewares/error';
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use('/api', userRoutes, idosoRoutes, eventoRoutes);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3333;
 
