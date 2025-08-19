@@ -1,0 +1,10 @@
+import { Request, Response, NextFunction } from "express";
+
+export const verifyCoordenador = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user.tipo !== "coordenador") {
+    return res.status(403).json({
+      message: "Acesso negado: apenas coordenadores podem realizar está ação."
+    });
+  }
+  next();
+};
