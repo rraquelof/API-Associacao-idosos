@@ -6,13 +6,14 @@ import idosoRoutes from './routes/idosoRoutes'
 import eventoRoutes from './routes/eventoRoutes';
 import { conectar } from './database/mongo';
 import { errorHandler } from './middlewares/error';
+import acompanhamentoRoutes from './routes/acompanhamentoRoutes';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use('/api', userRoutes, idosoRoutes, eventoRoutes);
+app.use('/api', userRoutes, idosoRoutes, eventoRoutes, acompanhamentoRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3333;
