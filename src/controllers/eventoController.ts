@@ -2,11 +2,9 @@ import { Request, Response } from "express";
 import Evento from "../models/Evento";
 import { ZodError } from "zod";
 import { createEventoSchema } from "../validations/eventoValidations";
-import idoso from "../models/idoso";
 
 export const createEvento = async (req: Request, res: Response) => {
     try{ 
-        if (!req.user || req.user.tipo !== "coordenador") return res.status(401).json({ message: "Você não pode cadastrar um evento. Deve ser o coordenador." });
     // Copia o body e faz parse de objetos/arrays vindos do form-data
     let body: any = { ...req.body };
 
@@ -37,9 +35,6 @@ export const createEvento = async (req: Request, res: Response) => {
 
 export const addIdososEmEvento = async (req: Request, res: Response) => {
   try{
-    if (!req.user || req.user.tipo !== "coordenador"){
-      return res.status(401).json({ message: "Somente um coordenador pode adicionar um idoso ao evento" });
-    } 
 
     const { id } = req.params;
     const { idosos } = req.body; //arrays de id dos idosos
