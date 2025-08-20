@@ -1,0 +1,244 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Associação de Idosos",
+        "version": "1.0.0",
+        "description": "API para gerenciar associações de idosos, incluindo usuários, idosos, eventos e acompanhamentos."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3333/api",
+            "description": "Servidor local"
+        }
+    ],
+    "paths": {
+        "/cadastrarUsuario": {
+            "post": {
+                "summary": "Cadastrar usuário",
+                "description": "Rota responsável por cadastrar um novo usuário na associação.",
+                "tags": [
+                    "Usuários"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "example": {
+                                "nome": "Maria Oliveira",
+                                "email": "maria@example.com",
+                                "cpf": "222.222.222-22",
+                                "senha": "SenhaForte123",
+                                "tipo": "coordenador",
+                                "sexo": "feminino",
+                                "endereco": "Rua das Flores, 123, São Paulo",
+                                "telefone": "(11) 99999-9999"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuário criado com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro de validação ou dado já cadastrado"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "Login do usuário",
+                "description": "Rota para autenticar o usuário e receber um token JWT.",
+                "tags": [
+                    "Autenticação"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "senha": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "senha"
+                                ]
+                            },
+                            "example": {
+                                "email": "maria@example.com",
+                                "senha": "SenhaForte123"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso"
+                    },
+                    "400": {
+                        "description": "Dados inválidos"
+                    },
+                    "401": {
+                        "description": "Erro de autenticação"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        },
+        "/cadastrarIdoso": {
+            "post": {
+                "summary": "Cadastrar idoso",
+                "description": "Rota responsável por cadastrar um novo idoso na associação.",
+                "tags": [
+                    "Idosos"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Idoso"
+                            },
+                            "example": {
+                                "nome": "João da Silva",
+                                "cpf": "111.111.111-11",
+                                "rg": "1.111.111",
+                                "sus": "111111111111111",
+                                "data_nascimento": "1940-01-01",
+                                "sexo": "masculino",
+                                "nacionalidade": "Brasileiro",
+                                "naturalidade": "São Paulo"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Idoso cadastrado com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro de validação ou dado já cadastrado"
+                    },
+                    "403": {
+                        "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "nome": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "cpf": {
+                        "type": "string"
+                    },
+                    "senha": {
+                        "type": "string"
+                    },
+                    "tipo": {
+                        "type": "string",
+                        "enum": ["coordenador", "voluntario", "familiar", "enfermeiro"]
+                    },
+                    "sexo": {
+                        "type": "string"
+                    },
+                    "endereco": {
+                        "type": "string"
+                    },
+                    "telefone": {
+                        "type": "string"
+                    }
+                },
+                "required": ["nome", "email", "cpf", "senha", "tipo", "sexo", "endereco", "telefone"]
+            },
+            "Idoso": {
+                "type": "object",
+                "properties": {
+                    "nome": {
+                        "type": "string"
+                    },
+                    "cpf": {
+                        "type": "string"
+                    },
+                    "rg": {
+                        "type": "string"
+                    },
+                    "sus": {
+                        "type": "string"
+                    },
+                    "data_nascimento": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "sexo": {
+                        "type": "string"
+                    },
+                    "nacionalidade": {
+                        "type": "string"
+                    },
+                    "naturalidade": {
+                        "type": "string"
+                    }
+                },
+                "required": ["nome", "cpf", "rg", "sus", "data_nascimento", "sexo", "nacionalidade", "naturalidade"]
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
