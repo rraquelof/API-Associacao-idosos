@@ -15,7 +15,6 @@
     "/cadastrarUsuario": {
       "post": {
         "summary": "Cadastrar usuário",
-        "description": "Rota responsável por cadastrar um novo usuário na associação.",
         "tags": ["Usuários"],
         "requestBody": {
           "required": true,
@@ -23,37 +22,12 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/User"
-              },
-              "example": {
-                "nome": "Maria Oliveira",
-                "email": "maria@example.com",
-                "cpf": "222.222.222-22",
-                "senha": "SenhaForte123",
-                "tipo": "coordenador",
-                "sexo": "feminino",
-                "endereco": "Rua das Flores, 123, São Paulo",
-                "telefone": "(11) 99999-9999"
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Usuário criado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Usuário criado com sucesso"
-                    }
-                  }
-                }
-              }
-            }
-          },
+          "201": { "description": "Usuário criado com sucesso" },
           "400": { "description": "Erro de validação ou dado já cadastrado" },
           "500": { "description": "Erro interno do servidor" }
         }
@@ -62,7 +36,6 @@
     "/login": {
       "post": {
         "summary": "Login do usuário",
-        "description": "Rota para autenticar o usuário e receber um token JWT.",
         "tags": ["Autenticação"],
         "requestBody": {
           "required": true,
@@ -75,52 +48,33 @@
                   "senha": { "type": "string" }
                 },
                 "required": ["email", "senha"]
-              },
-              "example": {
-                "email": "maria@example.com",
-                "senha": "SenhaForte123"
               }
             }
           }
         },
         "responses": {
           "200": { "description": "Login realizado com sucesso" },
-          "400": { "description": "Dados inválidos" },
           "401": { "description": "Erro de autenticação" },
-          "404": { "description": "Usuário não encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "404": { "description": "Usuário não encontrado" }
         }
       }
     },
     "/cadastrarIdoso": {
       "post": {
         "summary": "Cadastrar idoso",
-        "description": "Rota responsável por cadastrar um novo idoso na associação.",
         "tags": ["Idosos"],
         "security": [{ "BearerAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Idoso"
-              },
-              "example": {
-                "nome": "João da Silva",
-                "cpf": "111.111.111-11",
-                "rg": "1.111.111",
-                "sus": "111111111111111",
-                "data_nascimento": "1940-01-01",
-                "sexo": "masculino",
-                "nacionalidade": "Brasileiro",
-                "naturalidade": "São Paulo"
-              }
+              "schema": { "$ref": "#/components/schemas/Idoso" }
             }
           }
         },
         "responses": {
           "201": { "description": "Idoso cadastrado com sucesso" },
-          "400": { "description": "Erro de validação ou dado já cadastrado" },
+          "400": { "description": "Erro de validação ou idoso já cadastrado" },
           "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação." },
           "500": { "description": "Erro interno do servidor" }
         }
@@ -128,8 +82,7 @@
     },
     "/idosos": {
       "get": {
-        "summary": "Listar idosos",
-        "description": "Retorna todos os idosos cadastrados.",
+        "summary": "Listar todos os idosos",
         "tags": ["Idosos"],
         "security": [{ "BearerAuth": [] }],
         "responses": {
@@ -139,9 +92,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Idoso"
-                  }
+                  "items": { "$ref": "#/components/schemas/Idoso" }
                 }
               }
             }
@@ -152,38 +103,16 @@
         }
       }
     },
-    "/idoso/:cpf": {
+    "/idoso/{cpf}": {
       "get": {
         "summary": "Buscar idoso por CPF",
-        "description": "Retorna um idoso pelo CPF.",
         "tags": ["Idosos"],
         "security": [{ "BearerAuth": [] }],
         "parameters": [
-          {
-            "name": "cpf",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
+          { "name": "cpf", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "responses": {
-          "200": {
-            "description": "Idoso encontrado",
-            "content": {
-              "application/json": {
-                "example": {
-                  "nome": "João da Silva",
-                  "cpf": "111.111.111-11",
-                  "rg": "1.111.111",
-                  "sus": "111111111111111",
-                  "data_nascimento": "1940-01-01",
-                  "sexo": "masculino",
-                  "nacionalidade": "Brasileiro",
-                  "naturalidade": "São Paulo"
-                }
-              }
-            }
-          },
+          "200": { "description": "Idoso encontrado" },
           "400": { "description": "Erro de validação" },
           "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação." },
           "404": { "description": "Idoso não encontrado" },
@@ -192,35 +121,15 @@
       },
       "put": {
         "summary": "Atualizar idoso",
-        "description": "Atualiza os dados de um idoso pelo CPF.",
         "tags": ["Idosos"],
         "security": [{ "BearerAuth": [] }],
         "parameters": [
-          {
-            "name": "cpf",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
+          { "name": "cpf", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Idoso"
-              },
-              "example": {
-                "nome": "João da Silva",
-                "cpf": "111.111.111-11",
-                "rg": "1.111.111",
-                "sus": "111111111111111",
-                "data_nascimento": "1940-01-01",
-                "sexo": "masculino",
-                "nacionalidade": "Brasileiro",
-                "naturalidade": "São Paulo"
-              }
-            }
+            "application/json": { "schema": { "$ref": "#/components/schemas/Idoso" } }
           }
         },
         "responses": {
@@ -233,21 +142,103 @@
       },
       "delete": {
         "summary": "Deletar idoso",
-        "description": "Remove um idoso pelo CPF.",
         "tags": ["Idosos"],
         "security": [{ "BearerAuth": [] }],
         "parameters": [
-          {
-            "name": "cpf",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
+          { "name": "cpf", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "responses": {
           "200": { "description": "Idoso deletado com sucesso" },
+          "400": { "description": "Erro de validação" },
           "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação." },
           "404": { "description": "Idoso não encontrado" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/cadastrarAcompanhamento": {
+      "post": {
+        "summary": "Criar acompanhamento",
+        "tags": ["Acompanhamentos"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "usuarioId": { "type": "string" },
+                  "idosoId": { "type": "string" }
+                },
+                "required": ["usuarioId", "idosoId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Acompanhamento criado" },
+          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
+          "404": { "description": "Usuário ou idoso não encontrado" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/acompanhamentos": {
+      "get": {
+        "summary": "Listar todos os acompanhamentos",
+        "tags": ["Acompanhamentos"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de acompanhamentos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Acompanhamento" }
+                }
+              }
+            }
+          },
+          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/acompanhamento/familiar": {
+      "get": {
+        "summary": "Listar acompanhamentos do familiar logado",
+        "tags": ["Acompanhamentos"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de acompanhamentos do familiar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Acompanhamento" }
+                }
+              }
+            }
+          },
+          "403": { "description": "Acesso negado: apenas familiares podem realizar esta ação" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/acompanhamento/{id}": {
+      "delete": {
+        "summary": "Deletar acompanhamento",
+        "tags": ["Acompanhamentos"],
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Acompanhamento deletado" },
+          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
           "500": { "description": "Erro interno do servidor" }
         }
       }
@@ -259,7 +250,7 @@
         "type": "object",
         "properties": {
           "nome": { "type": "string" },
-          "email": { "type": "string", "format": "email" },
+          "email": { "type": "string" },
           "cpf": { "type": "string" },
           "senha": { "type": "string" },
           "tipo": {
@@ -269,8 +260,7 @@
           "sexo": { "type": "string" },
           "endereco": { "type": "string" },
           "telefone": { "type": "string" }
-        },
-        "required": ["nome", "email", "cpf", "senha", "tipo", "sexo", "endereco", "telefone"]
+        }
       },
       "Idoso": {
         "type": "object",
@@ -283,8 +273,15 @@
           "sexo": { "type": "string" },
           "nacionalidade": { "type": "string" },
           "naturalidade": { "type": "string" }
-        },
-        "required": ["nome", "cpf", "rg", "sus", "data_nascimento", "sexo", "nacionalidade", "naturalidade"]
+        }
+      },
+      "Acompanhamento": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "usuario": { "$ref": "#/components/schemas/User" },
+          "idoso": { "$ref": "#/components/schemas/Idoso" }
+        }
       }
     },
     "securitySchemes": {

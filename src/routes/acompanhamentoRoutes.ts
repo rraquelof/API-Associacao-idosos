@@ -6,9 +6,9 @@ const router = Router();
 
 router.use(authenticate);
 
-router.post("/", createAcompanhamento);
-router.get("/", getAllAcompanhamentos);
-router.get("/familiar", getAcompanhamentosByFamiliar);
-router.delete("/:id", deleteAcompanhamento);
+router.post("/cadastrarAcompanhamento", createAcompanhamento);
+router.get("/acompanhamentos", getAllAcompanhamentos);
+router.get("/acompanhamento/familiar", getAcompanhamentosByFamiliar);
+router.delete("/acompanhamento/:id", deleteAcompanhamento);
 
 export default router;
