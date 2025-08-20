@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { ZodError } from "zod";
 import Idoso from "../models/idoso";
 import { createIdosoSchema } from "../validations/idosoValidations";
-import { create } from "domain";
+
 
 export const createIdoso = async (req: Request, res: Response) => {
   const data = createIdosoSchema.parse(req.body);

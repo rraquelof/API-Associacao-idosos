@@ -5,7 +5,7 @@ import { verifyCoordenador } from "../middlewares/verificarCoordenador";
 
 const routerIdoso = Router();
 
-routerIdoso.post('/cadastrar', authenticate, verifyCoordenador, createIdoso);
+routerIdoso.post('/cadastrarIdoso', authenticate, verifyCoordenador, createIdoso);
 routerIdoso.get('/idosos', authenticate, verifyCoordenador, getIdosos);
 routerIdoso.get('/idoso/:cpf', authenticate, verifyCoordenador, getIdosoByCpf);
 routerIdoso.put('/idoso/:cpf', authenticate, verifyCoordenador, updateIdoso);
