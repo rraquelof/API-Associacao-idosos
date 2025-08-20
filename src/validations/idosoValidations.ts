@@ -15,4 +15,8 @@ export const createIdosoSchema = z.object({
     naturalidade: z.string().min(3, "Naturalidade deve ter pelo menos 3 caracteres")
 }); 
 
+export const cpfParamSchema = z.object({
+  cpf: z.string().regex(cpfRegex, "Formato CPF inválido. Formato esperado: xxx.xxx.xxx-xx"),
+});
+
 export type CreateIdosoDTO = z.infer <typeof createIdosoSchema>

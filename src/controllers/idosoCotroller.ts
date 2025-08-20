@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Idoso from "../models/idoso";
-import { createIdosoSchema } from "../validations/idosoValidations";
+import { createIdosoSchema, cpfParamSchema } from "../validations/idosoValidations";
 
 
 export const createIdoso = async (req: Request, res: Response) => {
@@ -23,11 +23,15 @@ export const createIdoso = async (req: Request, res: Response) => {
 export const getIdosos = async (req: Request, res: Response) => {
   const idosos = await Idoso.find();
 
+    if (!idosos) {
+    return res.status(404).json({ message: "Nenhum idoso encontrado" });
+  };
+
   res.status(200).json(idosos);
 };
 
 export const getIdosoByCpf = async (req: Request, res: Response) => {
-  const { cpf } = req.params;
+  const { cpf } = cpfParamSchema.parse(req.params);
 
   const idoso = await Idoso.findOne({ cpf: cpf });
 
@@ -39,12 +43,16 @@ export const getIdosoByCpf = async (req: Request, res: Response) => {
 };
 
 export const updateIdoso = async (req: Request, res: Response) => {
-  const { cpf } = req.params;
+  const { cpf } = cpfParamSchema.parse(req.params);
   const data = createIdosoSchema.parse(req.body);
 
   const idosoUpdate = await Idoso.findOneAndUpdate(
     { cpf: cpf },
     data, { new: true });
+
+  if (!idosoUpdate) {
+    return res.status(404).json({ message: "Idoso não encontrado" });
+  }
 
   res.status(200).json({
     message: "Idoso atualizado com sucesso", idosoUpdate
@@ -52,7 +60,7 @@ export const updateIdoso = async (req: Request, res: Response) => {
 };
 
 export const deleteIdoso = async (req: Request, res: Response) => {
-  const { cpf } = req.params;
+  const { cpf } = cpfParamSchema.parse(req.params);
 
   const idosoDeleted = await Idoso.findOneAndDelete({ cpf: cpf });
 
