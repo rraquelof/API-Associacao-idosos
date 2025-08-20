@@ -4,7 +4,6 @@ import { ZodError } from "zod";
 import { createEventoSchema } from "../validations/eventoValidations";
 
 export const createEvento = async (req: Request, res: Response) => {
-    try{ 
     // Copia o body e faz parse de objetos/arrays vindos do form-data
     let body: any = { ...req.body };
 
@@ -16,7 +15,6 @@ export const createEvento = async (req: Request, res: Response) => {
     if (req.file) {
       body.imagem = `/uploads/${req.file.filename}`;
     }
-
     // Valida com Zod usando o objeto já processado
     const data = createEventoSchema.parse(body);
 
@@ -24,34 +22,29 @@ export const createEvento = async (req: Request, res: Response) => {
     const newEvento = await Evento.create(data);
 
     res.status(201).json({message: "Evento criado com sucesso", newEvento});
-
-    } catch (error: any) {
-    if (error instanceof ZodError) {
-      return res.status(400).json({ message: "Dados inválidos", errors: error.issues });
-    }
-    res.status(500).json({ message: "Erro no servidor ao criar evento" });
-  }
 }
 
 export const addIdososEmEvento = async (req: Request, res: Response) => {
-  try{
+  const { id } = req.params;
+  const { idosos } = req.body; //arrays de id dos idosos
 
-    const { id } = req.params;
-    const { idosos } = req.body; //arrays de id dos idosos
-
-    const evento = await Evento.findByIdAndUpdate(
-      id,
-      { $addToSet: {idosos: { $each: idosos} } }, //evitar duplicidade
-      { new: true}
-    ).populate("idosos");
+  const evento = await Evento.findByIdAndUpdate(
+    id,
+    { $addToSet: {idosos: { $each: idosos} } }, //evitar duplicidade
+    { new: true}
+  ).populate("idosos");
     
-    if(!evento){
-      res.status(500).json({ message: "Erro ao achar o evento" });
-    }
-    res.status(200).json({ message: "Idoso adicionado com sucesso", evento});
-
-  }catch (error: any) {
-    console.error(error);
-    res.status(500).json({ message: "Erro ao adicionar idosos", error: error.message });
+  if(!evento){
+    res.status(500).json({ message: "Erro ao achar o evento" });
   }
+  res.status(200).json({ message: "Idoso adicionado com sucesso", evento});
+}
+
+export const getEvento = async (req: Request, res: Response) => {
+  const evento = await Evento.find();
+  
+  if(!evento){
+    return res.status(404).json({ message: "Nenhum evento encontrado"});
+  }
+  res.status(200).json(evento);
 }
