@@ -152,7 +152,7 @@
         }
       }
     },
-    "/idoso/{cpf}": {
+    "/idoso/:cpf": {
       "get": {
         "summary": "Buscar idoso por CPF",
         "description": "Retorna um idoso pelo CPF.",
