@@ -2,10 +2,11 @@ import { Router } from "express";
 import { addIdososEmEvento, createEvento } from "../controllers/eventoController";
 import { authenticate } from "../middlewares/autenticacaoMiddleware";
 import { upload } from "../config/multer";
+import { verifyCoordenador } from "../middlewares/verificarCoordenador";
 
 const routerEvento = Router();
 
-routerEvento.post('/cadastroEvento', authenticate, upload.single("imagem"), createEvento);
-routerEvento.post('/eventos/:id/idosos', authenticate, addIdososEmEvento);
+routerEvento.post('/cadastroEvento', authenticate, verifyCoordenador, upload.single("imagem"), createEvento);
+routerEvento.post('/eventos/:id/idosos', authenticate, verifyCoordenador, addIdososEmEvento);
 
 export default routerEvento;
