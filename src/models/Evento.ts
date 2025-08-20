@@ -8,6 +8,7 @@ export interface IEvento extends Document {
         type: "Point";
         coordinates: [number, number];
     }
+    imagem: string;
     idosos: mongoose.Types.ObjectId[]; 
 }
 
@@ -34,6 +35,10 @@ const eventoSchema = new mongoose.Schema({
             required: true
         }
     },
+    imagem: { 
+        type: String 
+    },
+
     idosos: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Idoso", // referencia o model Idoso
