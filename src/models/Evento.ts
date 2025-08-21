@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 export interface IEvento extends Document {
     nome: string,
