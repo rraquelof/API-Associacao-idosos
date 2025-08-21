@@ -5,8 +5,6 @@ import Acompanhamento from "../models/Acompanhamento";
 
 export const createAcompanhamento = async (req: Request, res: Response) => {
     try {
-        if (req.user?.tipo !== "coordenador") return res.status(403).json({ message: "Acesso negado" });
-
         const { usuarioId, idosoId } = req.body;
 
         const usuario = await Usuario.findById(usuarioId);
@@ -24,8 +22,6 @@ export const createAcompanhamento = async (req: Request, res: Response) => {
 
 export const getAllAcompanhamentos = async (req:Request, res: Response) => {
     try {
-        if (req.user?.tipo !== "coordenador") return res.status(403).json({ message: "Acesso negado" });
-
         const acompanhamentos = await Acompanhamento.find().populate("usuario").populate("idoso");
         return res.status(200).json(acompanhamentos);
     } catch (error) {
@@ -49,12 +45,25 @@ export const getAcompanhamentosByFamiliar = async (req: Request, res: Response) 
 
 export const deleteAcompanhamento = async (req: Request, res: Response) => {
     try {
-        if(req.user?.tipo !== "coordenador") return res.status(403).json({ message: "Acesso negado" });
-
         const id = req.params.id;
         await Acompanhamento.findByIdAndDelete(id);
         return res.status(200).json({ message: "Acompanhamento deletado com sucesso" });
     } catch (error) {
         return res.status(500).json({ message: "Erro ao deletar acompanhamento", error });
+    }
+};
+
+//criar rota put
+export const updateAcompanhamento = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const { usuarioId, idosoId } = req.body;
+
+        const acompanhamento = await Acompanhamento.findByIdAndUpdate(id, { usuario: usuarioId, idoso: idosoId }, { new: true });
+        if (!acompanhamento) return res.status(404).json({ message: "Acompanhamento não encontrado" });
+
+        return res.status(200).json(acompanhamento);
+    } catch (error) {
+        return res.status(500).json({ message: "Erro ao atualizar acompanhamento", error });
     }
 };

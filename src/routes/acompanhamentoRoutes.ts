@@ -1,14 +1,16 @@
 import { Router } from "express";
 import { authenticate } from "../middlewares/autenticacaoMiddleware";
-import { createAcompanhamento, getAllAcompanhamentos, getAcompanhamentosByFamiliar, deleteAcompanhamento } from "../controllers/acompanhamentoController";
+import { createAcompanhamento, getAllAcompanhamentos, getAcompanhamentosByFamiliar, deleteAcompanhamento, updateAcompanhamento } from "../controllers/acompanhamentoController";
+import { verifyCoordenador } from "../middlewares/verificarCoordenador";
 
 const router = Router();
 
 router.use(authenticate);
 
-router.post("/cadastrarAcompanhamento", createAcompanhamento);
-router.get("/acompanhamentos", getAllAcompanhamentos);
-router.get("/acompanhamento/familiar", getAcompanhamentosByFamiliar);
-router.delete("/acompanhamento/:id", deleteAcompanhamento);
+router.post("/cadastrarAcompanhamento", createAcompanhamento, verifyCoordenador);
+router.get("/acompanhamentos", getAllAcompanhamentos, verifyCoordenador);
+router.get("/acompanhamento/familiar", getAcompanhamentosByFamiliar, verifyCoordenador);
+router.delete("/acompanhamento/:id", deleteAcompanhamento, verifyCoordenador);
+router.put("/acompanhamento/:id", updateAcompanhamento, verifyCoordenador);
 
 export default router;
