@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Idoso from "../models/idoso";
-import { createIdosoSchema, cpfParamSchema } from "../validations/idosoValidations";
+import { createIdosoSchema } from "../validations/idosoValidations";
 
 
 export const createIdoso = async (req: Request, res: Response) => {
@@ -23,50 +23,51 @@ export const createIdoso = async (req: Request, res: Response) => {
 export const getIdosos = async (req: Request, res: Response) => {
   const idosos = await Idoso.find();
 
-    if (!idosos) {
+  if (!idosos || idosos.length === 0) {
     return res.status(404).json({ message: "Nenhum idoso encontrado" });
-  };
+  }
 
   res.status(200).json(idosos);
 };
 
-export const getIdosoByCpf = async (req: Request, res: Response) => {
-  const { cpf } = cpfParamSchema.parse(req.params);
 
-  const idoso = await Idoso.findOne({ cpf: cpf });
+export const getIdosoById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const idoso = await Idoso.findById(id);
 
   if (!idoso) {
     return res.status(404).json({ message: "Idoso não encontrado" });
-  };
+  }
 
   res.status(200).json(idoso);
 };
 
+
 export const updateIdoso = async (req: Request, res: Response) => {
-  const { cpf } = cpfParamSchema.parse(req.params);
+  const { id } = req.params;
   const data = createIdosoSchema.parse(req.body);
 
-  const idosoUpdate = await Idoso.findOneAndUpdate(
-    { cpf: cpf },
-    data, { new: true });
+  const idosoUpdate = await Idoso.findByIdAndUpdate(id, data, { new: true });
 
   if (!idosoUpdate) {
     return res.status(404).json({ message: "Idoso não encontrado" });
   }
 
   res.status(200).json({
-    message: "Idoso atualizado com sucesso", idosoUpdate
+    message: "Idoso atualizado com sucesso",
+    idoso: idosoUpdate
   });
 };
 
 export const deleteIdoso = async (req: Request, res: Response) => {
-  const { cpf } = cpfParamSchema.parse(req.params);
+  const { id } = req.params;
 
-  const idosoDeleted = await Idoso.findOneAndDelete({ cpf: cpf });
+  const idosoDeleted = await Idoso.findByIdAndDelete(id);
 
   if (!idosoDeleted) {
     return res.status(404).json({ message: "Idoso não encontrado" });
-  };
+  }
 
   res.status(200).json({ message: "Idoso deletado com sucesso" });
 };

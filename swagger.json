@@ -20,9 +20,7 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
+              "schema": { "$ref": "#/components/schemas/User" }
             }
           }
         },
@@ -67,9 +65,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/Idoso" }
-            }
+            "application/json": { "schema": { "$ref": "#/components/schemas/Idoso" } }
           }
         },
         "responses": {
@@ -103,16 +99,21 @@
         }
       }
     },
-    "/idoso/{cpf}": {
+    "/idoso/{id}": {
       "get": {
-        "summary": "Buscar idoso por CPF",
+        "summary": "Buscar idoso por ID",
         "tags": ["Idosos"],
         "security": [{ "BearerAuth": [] }],
         "parameters": [
-          { "name": "cpf", "in": "path", "required": true, "schema": { "type": "string" } }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "responses": {
-          "200": { "description": "Idoso encontrado" },
+          "200": {
+            "description": "Idoso encontrado",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Idoso" } }
+            }
+          },
           "400": { "description": "Erro de validação" },
           "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação." },
           "404": { "description": "Idoso não encontrado" },
@@ -124,7 +125,7 @@
         "tags": ["Idosos"],
         "security": [{ "BearerAuth": [] }],
         "parameters": [
-          { "name": "cpf", "in": "path", "required": true, "schema": { "type": "string" } }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "requestBody": {
           "required": true,
@@ -145,7 +146,7 @@
         "tags": ["Idosos"],
         "security": [{ "BearerAuth": [] }],
         "parameters": [
-          { "name": "cpf", "in": "path", "required": true, "schema": { "type": "string" } }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "responses": {
           "200": { "description": "Idoso deletado com sucesso" },
@@ -250,7 +251,7 @@
         "type": "object",
         "properties": {
           "nome": { "type": "string" },
-          "email": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
           "cpf": { "type": "string" },
           "senha": { "type": "string" },
           "tipo": {
@@ -260,7 +261,8 @@
           "sexo": { "type": "string" },
           "endereco": { "type": "string" },
           "telefone": { "type": "string" }
-        }
+        },
+        "required": ["nome", "email", "cpf", "senha", "tipo"]
       },
       "Idoso": {
         "type": "object",
@@ -273,7 +275,8 @@
           "sexo": { "type": "string" },
           "nacionalidade": { "type": "string" },
           "naturalidade": { "type": "string" }
-        }
+        },
+        "required": ["nome", "cpf", "rg", "sus", "data_nascimento", "sexo", "nacionalidade", "naturalidade"]
       },
       "Acompanhamento": {
         "type": "object",
@@ -281,7 +284,8 @@
           "id": { "type": "string" },
           "usuario": { "$ref": "#/components/schemas/User" },
           "idoso": { "$ref": "#/components/schemas/Idoso" }
-        }
+        },
+        "required": ["id", "usuario", "idoso"]
       }
     },
     "securitySchemes": {
