@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Evento from "../models/Evento";
-import { ZodError } from "zod";
+import { any, ZodError } from "zod";
 import { createEventoSchema } from "../validations/eventoValidations";
 
 export const createEvento = async (req: Request, res: Response) => {
@@ -47,4 +47,33 @@ export const getEvento = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Nenhum evento encontrado"});
   }
   res.status(200).json(evento);
+}
+
+export const getEventoById = async (req: Request, res: Response) =>{
+  const evento = await Evento.findById(req.params.id); 
+  if(!evento){
+    return res.status(404).json({ message: "Nenhum evento encontrado"});
+  }
+  res.status(200).json(evento);
+}
+
+export const updateEvento = async (req: Request, res: Response) => {
+  const evento = await Evento.findByIdAndUpdate(
+    req.params.id, 
+    req.body,
+    { new:true }
+  );
+
+  if(!evento){
+    res.status(404).json("Evento não encontrado.");
+  }
+  res.status(200).json({message: "Evento atualizado com sucesso!", evento});
+}
+
+export const deleteEvento = async(req: Request, res: Response) => {
+  const evento = await Evento.findByIdAndDelete(req.params.id);
+  if(!evento){
+    res.status(404).json("Evento não encontrado.");
+  }
+  res.status(200).json({message: "Evento deletado com sucesso!", evento});
 }
