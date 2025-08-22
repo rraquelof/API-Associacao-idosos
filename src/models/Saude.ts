@@ -18,7 +18,6 @@ const saudeSchema = new Schema<ISaude>(
     usuarioId: { type: Schema.Types.ObjectId, ref: "Usuario", required: true },
     idosoId: { type: Schema.Types.ObjectId, ref: "Idoso", required: true },
     dataConsulta: { type: Date, default: Date.now },
-
     altura: { type: Number, required: true},
     peso: { type: Number, required: true },
     pressao: { type: String, required: true },

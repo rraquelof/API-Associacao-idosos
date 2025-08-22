@@ -3,7 +3,7 @@
   "info": {
     "title": "API de Associação de Idosos",
     "version": "1.0.0",
-    "description": "API para gerenciar associações de idosos, incluindo usuários, idosos, eventos e acompanhamentos."
+    "description": "API para gerenciar associações de idosos, incluindo usuários, idosos, eventos, acompanhamentos e saúde."
   },
   "servers": [
     {
@@ -15,26 +15,38 @@
     "/cadastrarUsuario": {
       "post": {
         "summary": "Cadastrar usuário",
-        "tags": ["Usuários"],
+        "tags": [
+          "Usuários"
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/User" }
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
             }
           }
         },
         "responses": {
-          "201": { "description": "Usuário criado com sucesso" },
-          "400": { "description": "Erro de validação ou dado já cadastrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "201": {
+            "description": "Usuário criado com sucesso"
+          },
+          "400": {
+            "description": "Erro de validação ou dado já cadastrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/login": {
       "post": {
         "summary": "Login do usuário",
-        "tags": ["Autenticação"],
+        "tags": [
+          "Autenticação"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -42,178 +54,461 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "format": "email" },
-                  "senha": { "type": "string" }
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "senha": {
+                    "type": "string"
+                  }
                 },
-                "required": ["email", "senha"]
+                "required": [
+                  "email",
+                  "senha"
+                ]
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "Login realizado com sucesso" },
-          "401": { "description": "Erro de autenticação" },
-          "404": { "description": "Usuário não encontrado" }
+          "200": {
+            "description": "Login realizado com sucesso"
+          },
+          "401": {
+            "description": "Erro de autenticação"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
         }
       }
     },
     "/cadastrarIdoso": {
       "post": {
         "summary": "Cadastrar idoso",
-        "tags": ["Idosos"],
-        "security": [{"BearerAuth": []}],
+        "tags": [
+          "Idosos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/Idoso" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Idoso"
+              }
+            }
           }
         },
         "responses": {
-          "201": { "description": "Idoso cadastrado com sucesso" },
-          "400": { "description": "Erro de validação ou idoso já cadastrado" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação." },
-          "500": { "description": "Erro interno do servidor" }
+          "201": {
+            "description": "Idoso cadastrado com sucesso"
+          },
+          "400": {
+            "description": "Erro de validação ou idoso já cadastrado"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/idosos": {
       "get": {
         "summary": "Listar todos os idosos",
-        "tags": ["Idosos"],
-        "security": [{"BearerAuth": []}],
+        "tags": [
+          "Idosos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Lista de idosos",
-            "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Idoso" } } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Idoso"
+                  }
+                }
+              }
+            }
           },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação." },
-          "404": { "description": "Nenhum idoso encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+          },
+          "404": {
+            "description": "Nenhum idoso encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/idoso/{id}": {
       "get": {
         "summary": "Buscar idoso por ID",
-        "tags": ["Idosos"],
-        "security": [{"BearerAuth": []}],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "tags": [
+          "Idosos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
-          "200": { "description": "Idoso encontrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Idoso" } } } },
-          "400": { "description": "Erro de validação" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação." },
-          "404": { "description": "Idoso não encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Idoso encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Idoso"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+          },
+          "404": {
+            "description": "Idoso não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       },
       "put": {
         "summary": "Atualizar idoso",
-        "tags": ["Idosos"],
-        "security": [{"BearerAuth": []}],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Idoso" } } } },
+        "tags": [
+          "Idosos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Idoso"
+              }
+            }
+          }
+        },
         "responses": {
-          "200": { "description": "Idoso atualizado com sucesso" },
-          "400": { "description": "Erro de validação" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação." },
-          "404": { "description": "Idoso não encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Idoso atualizado com sucesso"
+          },
+          "400": {
+            "description": "Erro de validação"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+          },
+          "404": {
+            "description": "Idoso não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       },
       "delete": {
         "summary": "Deletar idoso",
-        "tags": ["Idosos"],
-        "security": [{"BearerAuth": []}],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "tags": [
+          "Idosos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
-          "200": { "description": "Idoso deletado com sucesso" },
-          "400": { "description": "Erro de validação" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação." },
-          "404": { "description": "Idoso não encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Idoso deletado com sucesso"
+          },
+          "400": {
+            "description": "Erro de validação"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+          },
+          "404": {
+            "description": "Idoso não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/cadastrarAcompanhamento": {
       "post": {
         "summary": "Criar acompanhamento",
-        "tags": ["Acompanhamentos"],
-        "security": [{"BearerAuth": []}],
+        "tags": [
+          "Acompanhamentos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": { "usuarioId": { "type": "string" }, "idosoId": { "type": "string" } },
-                "required": ["usuarioId", "idosoId"]
+                "properties": {
+                  "usuarioId": {
+                    "type": "string"
+                  },
+                  "idosoId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "usuarioId",
+                  "idosoId"
+                ]
               }
             }
           }
         },
         "responses": {
-          "201": { "description": "Acompanhamento criado" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
-          "404": { "description": "Usuário ou idoso não encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "201": {
+            "description": "Acompanhamento criado"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação"
+          },
+          "404": {
+            "description": "Usuário ou idoso não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/acompanhamentos": {
       "get": {
         "summary": "Listar todos os acompanhamentos",
-        "tags": ["Acompanhamentos"],
-        "security": [{"BearerAuth": []}],
+        "tags": [
+          "Acompanhamentos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "responses": {
-          "200": { "description": "Lista de acompanhamentos", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Acompanhamento" } } } } },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Lista de acompanhamentos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Acompanhamento"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/acompanhamento/familiar": {
       "get": {
         "summary": "Listar acompanhamentos do familiar logado",
-        "tags": ["Acompanhamentos"],
-        "security": [{"BearerAuth": []}],
+        "tags": [
+          "Acompanhamentos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "responses": {
-          "200": { "description": "Lista de acompanhamentos do familiar", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Acompanhamento" } } } } },
-          "403": { "description": "Acesso negado: apenas familiares podem realizar esta ação" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Lista de acompanhamentos do familiar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Acompanhamento"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso negado: apenas familiares podem realizar esta ação"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/acompanhamento/{id}": {
       "put": {
         "summary": "Atualizar acompanhamento",
-        "tags": ["Acompanhamentos"],
-        "security": [{"BearerAuth": []}],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "usuarioId": { "type": "string" }, "idosoId": { "type": "string" } }, "required": ["usuarioId","idosoId"] } } } },
+        "tags": [
+          "Acompanhamentos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "usuarioId": {
+                    "type": "string"
+                  },
+                  "idosoId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "usuarioId",
+                  "idosoId"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
-          "200": { "description": "Acompanhamento atualizado com sucesso" },
-          "404": { "description": "Acompanhamento não encontrado" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Acompanhamento atualizado com sucesso"
+          },
+          "404": {
+            "description": "Acompanhamento não encontrado"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       },
       "delete": {
         "summary": "Deletar acompanhamento",
-        "tags": ["Acompanhamentos"],
-        "security": [{"BearerAuth": []}],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "tags": [
+          "Acompanhamentos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
-          "200": { "description": "Acompanhamento deletado" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Acompanhamento deletado"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/cadastroEvento": {
       "post": {
         "summary": "Criar evento",
-        "tags": ["Eventos"],
-        "security": [{"BearerAuth": []}],
+        "tags": [
+          "Eventos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -221,96 +516,469 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "nome": { "type": "string" },
-                  "descricao": { "type": "string" },
-                  "data": { "type": "string", "format": "date-time" },
-                  "local": { "type": "string", "description": "JSON com tipo e coordinates" },
-                  "imagem": { "type": "string", "format": "binary" }
+                  "nome": {
+                    "type": "string"
+                  },
+                  "descricao": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "local": {
+                    "type": "string",
+                    "description": "JSON com tipo e coordinates"
+                  },
+                  "imagem": {
+                    "type": "string",
+                    "format": "binary"
+                  }
                 },
-                "required": ["nome","descricao","data","local"]
+                "required": [
+                  "nome",
+                  "descricao",
+                  "data",
+                  "local"
+                ]
               }
             }
           }
         },
         "responses": {
-          "201": { "description": "Evento criado com sucesso" },
-          "400": { "description": "Erro de validação" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação." },
-          "500": { "description": "Erro interno do servidor" }
+          "201": {
+            "description": "Evento criado com sucesso"
+          },
+          "400": {
+            "description": "Erro de validação"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/eventos": {
       "get": {
         "summary": "Listar todos os eventos",
-        "tags": ["Eventos"],
-        "security": [{"BearerAuth": []}],
+        "tags": [
+          "Eventos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "responses": {
-          "200": { "description": "Lista de eventos", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Evento" } } } } },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
-          "404": { "description": "Nenhum evento encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Lista de eventos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Evento"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação"
+          },
+          "404": {
+            "description": "Nenhum evento encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/eventos/{id}": {
       "get": {
         "summary": "Buscar evento por ID",
-        "tags": ["Eventos"],
-        "security": [{"BearerAuth": []}],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "tags": [
+          "Eventos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
-          "200": { "description": "Evento encontrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Evento" } } } },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
-          "404": { "description": "Evento não encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Evento encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Evento"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação"
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       },
       "put": {
         "summary": "Atualizar evento",
-        "tags": ["Eventos"],
-        "security": [{"BearerAuth": []}],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Evento" } } } },
+        "tags": [
+          "Eventos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Evento"
+              }
+            }
+          }
+        },
         "responses": {
-          "200": { "description": "Evento atualizado com sucesso" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
-          "404": { "description": "Evento não encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Evento atualizado com sucesso"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação"
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       },
       "delete": {
         "summary": "Deletar evento",
-        "tags": ["Eventos"],
-        "security": [{"BearerAuth": []}],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "tags": [
+          "Eventos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
-          "200": { "description": "Evento deletado com sucesso" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
-          "404": { "description": "Evento não encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Evento deletado com sucesso"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação"
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     },
     "/eventos/{id}/idosos": {
       "put": {
         "summary": "Adicionar idosos em um evento",
-        "tags": ["Eventos"],
-        "security": [{"BearerAuth": []}],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "tags": [
+          "Eventos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "type": "object", "properties": { "idosos": { "type": "array", "items": { "type": "string" } } }, "required": ["idosos"] }
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idosos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "idosos"
+                ]
+              }
             }
           }
         },
         "responses": {
-          "200": { "description": "Idosos adicionados com sucesso" },
-          "403": { "description": "Acesso negado: apenas coordenadores podem realizar esta ação" },
-          "404": { "description": "Evento não encontrado" },
-          "500": { "description": "Erro interno do servidor" }
+          "200": {
+            "description": "Idosos adicionados com sucesso"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação"
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/cadastrarConsulta": {
+      "post": {
+        "summary": "Registrar acompanhamento de saúde",
+        "tags": [
+          "Saúde"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Saude"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Acompanhamento de saúde registrado com sucesso"
+          },
+          "400": {
+            "description": "Erro de validação"
+          },
+          "401": {
+            "description": "Somente enfermeiros podem registrar acompanhamento de saúde"
+          },
+          "404": {
+            "description": "Idoso não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/saudeIdoso/{idosoId}": {
+      "get": {
+        "summary": "Listar registros de saúde de um idoso",
+        "tags": [
+          "Saúde"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idosoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de registros de saúde",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Saude"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nenhum registro de consulta encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/saudeIdoso/{id}": {
+      "get": {
+        "summary": "Obter registro de saúde por ID",
+        "tags": [
+          "Saúde"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro de saúde encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Saude"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nenhum registro de consulta encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar registro de saúde",
+        "tags": [
+          "Saúde"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaudeCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Registro de saúde atualizado com sucesso"
+          },
+          "404": {
+            "description": "Nenhum registro de consulta encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar registro de saúde",
+        "tags": [
+          "Saúde"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro de saúde deletado com sucesso"
+          },
+          "403": {
+            "description": "Acesso negado: apenas enfermeiros ou coordenadores podem deletar"
+          },
+          "404": {
+            "description": "Nenhum registro de consulta encontrado."
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       }
     }
@@ -320,61 +988,176 @@
       "User": {
         "type": "object",
         "properties": {
-          "nome": { "type": "string" },
-          "email": { "type": "string", "format": "email" },
-          "cpf": { "type": "string" },
-          "senha": { "type": "string" },
-          "tipo": { "type": "string", "enum": ["coordenador","voluntario","familiar","enfermeiro"] },
-          "sexo": { "type": "string" },
-          "endereco": { "type": "string" },
-          "telefone": { "type": "string" }
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "senha": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "coordenador",
+              "familiar",
+              "enfermeiro"
+            ]
+          }
         },
-        "required": ["nome","email","cpf","senha","tipo","sexo","endereco","telefone"]
+        "required": [
+          "nome",
+          "email",
+          "cpf",
+          "senha",
+          "tipo"
+        ]
       },
       "Idoso": {
         "type": "object",
         "properties": {
-          "nome": { "type": "string" },
-          "cpf": { "type": "string" },
-          "rg": { "type": "string" },
-          "sus": { "type": "string" },
-          "data_nascimento": { "type": "string", "format": "date" },
-          "sexo": { "type": "string" },
-          "nacionalidade": { "type": "string" },
-          "naturalidade": { "type": "string" }
+          "nome": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "dataNascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "sexo": {
+            "type": "string",
+            "enum": [
+              "M",
+              "F"
+            ]
+          },
+          "telefone": {
+            "type": "string"
+          },
+          "endereco": {
+            "type": "string"
+          }
         },
-        "required": ["nome","cpf","rg","sus","data_nascimento","sexo","nacionalidade","naturalidade"]
+        "required": [
+          "nome",
+          "cpf",
+          "dataNascimento",
+          "sexo",
+          "telefone",
+          "endereco"
+        ]
       },
       "Acompanhamento": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "usuario": { "$ref": "#/components/schemas/User" },
-          "idoso": { "$ref": "#/components/schemas/Idoso" }
+          "usuarioId": {
+            "type": "string"
+          },
+          "idosoId": {
+            "type": "string"
+          }
         },
-        "required": ["id","usuario","idoso"]
+        "required": [
+          "usuarioId",
+          "idosoId"
+        ]
       },
       "Evento": {
         "type": "object",
         "properties": {
-          "nome": { "type": "string" },
-          "descricao": { "type": "string" },
-          "data": { "type": "string", "format": "date-time" },
+          "nome": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string",
+            "format": "date-time"
+          },
           "local": {
             "type": "object",
             "properties": {
-              "type": { "type": "string", "enum": ["Point"] },
-              "coordinates": { "type": "array", "items": { "type": "number" } }
+              "type": {
+                "type": "string"
+              },
+              "coordinates": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
             }
           },
-          "imagem": { "type": "string" },
-          "idosos": { "type": "array", "items": { "type": "string" } }
+          "imagem": {
+            "type": "string"
+          }
         },
-        "required": ["nome","descricao","data","local"]
+        "required": [
+          "nome",
+          "descricao",
+          "data",
+          "local"
+        ]
+      },
+      "Saude": {
+        "type": "object",
+        "properties": {
+          "usuarioId": {
+            "type": "string"
+          },
+          "idosoId": {
+            "type": "string"
+          },
+          "dataConsulta": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "altura": {
+            "type": "number"
+          },
+          "peso": {
+            "type": "number"
+          },
+          "pressao": {
+            "type": "string"
+          },
+          "alergias": {
+            "type": "string"
+          },
+          "glicemia": {
+            "type": "number"
+          },
+          "doencasCronicas": {
+            "type": "string"
+          },
+          "estadoNutricional": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "usuarioId",
+          "idosoId",
+          "altura",
+          "peso",
+          "pressao",
+          "estadoNutricional"
+        ]
       }
     },
     "securitySchemes": {
-      "BearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
   }
 }

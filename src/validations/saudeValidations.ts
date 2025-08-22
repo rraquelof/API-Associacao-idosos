@@ -12,3 +12,5 @@ export const createSaudeSchema = z.object({
   doencasCronicas: z.string().optional(),
   estadoNutricional: z.string().optional(),
 });
+
+export type CreateIdosoDTO = z.infer <typeof createSaudeSchema>
