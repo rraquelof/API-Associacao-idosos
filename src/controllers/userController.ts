@@ -6,7 +6,6 @@ import Usuario from "../models/Usuario";
 import { createUserSchema, loginSchema } from "../validations/userValidations";
 
 export const createUser = async (req: Request, res: Response) => {
-    try {
         const data = createUserSchema.parse(req.body);
 
         const userExists = await Usuario.findOne({ email: data.email });
@@ -20,13 +19,47 @@ export const createUser = async (req: Request, res: Response) => {
         await newUser.save();
 
         res.status(201).json({ message: "Usuário criado com sucesso" });
-    } catch (error: any) {
-        if (error instanceof ZodError) {
-            return res.status(400).json({ message: "Dados inválidos", errors: error.issues });
-        }
-        res.status(500).json({ message: "Erro ao criar usuário" });
+};
+
+export const getUsers = async (req: Request, res: Response) => {
+    const users = await Usuario.find().select("-senha"); // não retorna senha
+    res.status(200).json(users);
+};
+
+export const getUserById = async (req: Request, res: Response) => {
+    const user = await Usuario.findById(req.params.id).select("-senha");
+    if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
+    res.status(200).json(user);
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    // só coordenador OU o próprio usuário pode editar
+    if (req.user?.tipo !== "coordenador" && req.user?.id !== id) {
+      return res.status(403).json({ message: "Acesso negado" });
     }
-}
+
+    const updates = { ...req.body };
+
+    if (updates.senha) {
+      updates.senha = await bcrypt.hash(updates.senha, 10);
+    }
+
+    const user = await Usuario.findByIdAndUpdate(id, updates, { new: true }).select("-senha");
+    if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
+
+    res.status(200).json({ message: "Usuário atualizado com sucesso", user });
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const user = await Usuario.findByIdAndDelete(id);
+    if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
+
+    res.status(200).json({ message: "Usuário deletado com sucesso" });
+};
 
 export const login = async (req: Request, res: Response) => {
     try {
