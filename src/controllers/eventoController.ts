@@ -35,7 +35,7 @@ export const addIdososEmEvento = async (req: Request, res: Response) => {
   ).populate("idosos");
     
   if(!evento){
-    res.status(500).json({ message: "Erro ao achar o evento" });
+    res.status(404).json({ message: "Nenhum evento encontrado" });
   }
   res.status(200).json({ message: "Idoso adicionado com sucesso", evento});
 }
