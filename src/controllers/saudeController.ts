@@ -3,7 +3,6 @@ import idoso from "../models/idoso";
 import Saude from "../models/Saude";
 import { createSaudeSchema } from "../validations/saudeValidations";
 import Usuario from "../models/Usuario";
-import { any } from "zod";
 
 export const createSaude = async (req: Request, res: Response) => {
     const { usuarioId, idosoId } = (req.body);
@@ -30,9 +29,15 @@ export const createSaude = async (req: Request, res: Response) => {
 }
 
 export const getSaude = async (req: Request, res: Response) => {
-    const saude = await Saude.find();
+    const { idosoId } = req.params; // pegar idoso específico 
 
-    if(!saude){
-        res.status(404).json({message: "Nenhum registro de consulta encontrado "});
+    // Busca todos os registros do idoso
+    const saude = await Saude.find({ idoso: idosoId }).sort({ dataConsulta: -1 });//retorna os registros de todos os idosos
+
+    if (!saude) {
+      return res.status(404).json({ message: "Nenhum registro de consulta encontrado" });
     }
+
+    return res.status(200).json(saude);
 }
+

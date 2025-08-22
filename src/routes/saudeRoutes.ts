@@ -5,6 +5,6 @@ import { createSaude, getSaude} from "../controllers/saudeController";
 const routerSaude = Router();
 
 routerSaude.post('/cadastrarSaude', authenticate, createSaude);
-routerSaude.get('/saudeIdoso/', authenticate, getSaude);
+routerSaude.get('/saudeIdoso', authenticate, getSaude);
 
 export default routerSaude;
