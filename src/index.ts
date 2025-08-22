@@ -8,6 +8,7 @@ import eventoRoutes from './routes/eventoRoutes';
 import { conectar } from './database/mongo';
 import { errorHandler } from './middlewares/error';
 import acompanhamentoRoutes from './routes/acompanhamentoRoutes';
+import saudeRoutes from './routes/saudeRoutes'
 const swaggerDocs = require("../swagger.json");
 
 dotenv.config();
@@ -16,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
-app.use('/api', userRoutes, idosoRoutes, eventoRoutes, acompanhamentoRoutes);
+app.use('/api', userRoutes, idosoRoutes, eventoRoutes, acompanhamentoRoutes, saudeRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(errorHandler);
 
