@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Evento from "../models/Evento";
+import Evento from "../models/evento";
 import { any, ZodError } from "zod";
 import { createEventoSchema } from "../validations/eventoValidations";
 

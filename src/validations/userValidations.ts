@@ -1,14 +1,15 @@
 import { z } from 'zod';
 
+const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
 export const createUserSchema = z.object({
-    nome: z.string().min(3),
+    nome: z.string().min(3, "Nome deve ter ao menos 3 caracteres"),
     email: z.string(),
-    cpf: z.string().min(11),
-    senha: z.string().min(6),
+    cpf: z.string().regex(cpfRegex, "Formato CPF inválido. Formato esperado: xxx.xxx.xxx-xx"),
+    senha: z.string().min(6, "Senha deve ter ao menos 6 caracteres"),
     tipo: z.enum(['coordenador', 'voluntario', 'familiar', 'enfermeiro']),
     sexo: z.enum(['masculino', 'feminino']),
-    endereco: z.string().min(5),
-    telefone: z.string().min(10),
+    endereco: z.string().min(5, "Endereço deve ter ao menos 5 caracteres"),
+    telefone: z.string().min(10, "Telefone deve ter ao menos 10 caracteres"),
 });
 
 export const loginSchema = z.object({

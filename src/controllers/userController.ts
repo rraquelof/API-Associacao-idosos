@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { ZodError } from "zod";
-import Usuario from "../models/Usuario";
+import Usuario from "../models/usuario";
 import { createUserSchema, loginSchema } from "../validations/userValidations";
 
 export const createUser = async (req: Request, res: Response) => {
@@ -18,7 +18,7 @@ export const createUser = async (req: Request, res: Response) => {
         const newUser = new Usuario({ ...data, senha: passwordHash });
         await newUser.save();
 
-        res.status(201).json({ message: "Usuário criado com sucesso" });
+        res.status(201).json({ message: "Usuário criado com sucesso", newUser });
 };
 
 export const getUsers = async (req: Request, res: Response) => {
@@ -40,7 +40,7 @@ export const updateUser = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Acesso negado" });
     }
 
-    const updates = { ...req.body };
+    const updates = createUserSchema.parse(req.body);;
 
     if (updates.senha) {
       updates.senha = await bcrypt.hash(updates.senha, 10);

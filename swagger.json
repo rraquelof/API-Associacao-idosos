@@ -888,7 +888,7 @@
       }
     },
     "/eventos/{id}/idosos": {
-      "post": {
+      "put": {
         "summary": "Adicionar idosos em um evento",
         "tags": [
           "Eventos"
@@ -1173,6 +1173,15 @@
               "familiar",
               "enfermeiro"
             ]
+          },
+          "sexo": {
+            "type": "string"
+          },
+          "endereco": {
+            "type": "string"
+          },
+          "telefone": {
+            "type": "string"
           }
         },
         "required": [
@@ -1180,7 +1189,10 @@
           "email",
           "cpf",
           "senha",
-          "tipo"
+          "tipo",
+          "sexo",
+          "endereco",
+          "telefone"
         ]
       },
       "Idoso": {
@@ -1192,31 +1204,35 @@
           "cpf": {
             "type": "string"
           },
-          "dataNascimento": {
+          "rg": {
+            "type": "string"
+          },
+          "sus": {
+            "type": "string"
+          },
+          "data_nascimento": {
             "type": "string",
             "format": "date"
           },
           "sexo": {
-            "type": "string",
-            "enum": [
-              "M",
-              "F"
-            ]
-          },
-          "telefone": {
             "type": "string"
           },
-          "endereco": {
+          "nacionalidade": {
+            "type": "string"
+          },
+          "naturalidade": {
             "type": "string"
           }
         },
         "required": [
           "nome",
           "cpf",
-          "dataNascimento",
+          "rg",
+          "sus",
+          "data_nascimento",
           "sexo",
-          "telefone",
-          "endereco"
+          "nacionalidade",
+          "naturalidade"
         ]
       },
       "Acompanhamento": {

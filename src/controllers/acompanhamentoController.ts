@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Idoso from "../models/idoso";
-import Usuario from "../models/Usuario";
-import Acompanhamento from "../models/Acompanhamento";
+import Usuario from "../models/usuario";
+import Acompanhamento from "../models/acompanhamento";
 
 export const createAcompanhamento = async (req: Request, res: Response) => {
         const { usuarioId, idosoId } = req.body;
@@ -18,6 +18,11 @@ export const createAcompanhamento = async (req: Request, res: Response) => {
 
 export const getAllAcompanhamentos = async (req:Request, res: Response) => {
         const acompanhamentos = await Acompanhamento.find().populate("usuario").populate("idoso");
+
+        if (acompanhamentos.length === 0) {
+            return res.status(404).json({ message: "Nenhum acompanhamento encontrado" });
+        }
+
         return res.status(200).json(acompanhamentos);
 };
 

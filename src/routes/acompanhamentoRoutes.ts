@@ -7,10 +7,10 @@ const router = Router();
 
 router.use(authenticate);
 
-router.post("/cadastrarAcompanhamento", createAcompanhamento, verifyCoordenador);
-router.get("/acompanhamentos", getAllAcompanhamentos, verifyCoordenador);
-router.get("/acompanhamento/familiar", getAcompanhamentosByFamiliar, verifyCoordenador);
-router.delete("/acompanhamento/:id", deleteAcompanhamento, verifyCoordenador);
-router.put("/acompanhamento/:id", updateAcompanhamento, verifyCoordenador);
+router.post("/cadastrarAcompanhamento", verifyCoordenador, createAcompanhamento);
+router.get("/acompanhamentos", verifyCoordenador, getAllAcompanhamentos, verifyCoordenador);
+router.get("/acompanhamento/familiar", verifyCoordenador, getAcompanhamentosByFamiliar);
+router.delete("/acompanhamento/:id", verifyCoordenador, deleteAcompanhamento);
+router.put("/acompanhamento/:id", verifyCoordenador, updateAcompanhamento,);
 
 export default router;
