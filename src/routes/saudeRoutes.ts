@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authenticate } from "../middlewares/autenticacaoMiddleware";
 import { createSaude, getSaude, getSaudeById, putSaude, deleteSaude } from "../controllers/saudeController";
-import { verifyEnfermeiro } from "../middlewares/verificarCoordenador";
+import { verifyEnfermeiro } from "../middlewares/verificarUser";
 
 const routerSaude = Router();
 

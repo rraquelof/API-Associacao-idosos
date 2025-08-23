@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authenticate } from "../middlewares/autenticacaoMiddleware";
 import { createAcompanhamento, getAllAcompanhamentos, getAcompanhamentosByFamiliar, deleteAcompanhamento, updateAcompanhamento } from "../controllers/acompanhamentoController";
-import { verifyCoordenador } from "../middlewares/verificarCoordenador";
+import { verifyCoordenador } from "../middlewares/verificarUser";
 
 const router = Router();
 

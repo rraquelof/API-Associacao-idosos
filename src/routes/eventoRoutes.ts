@@ -2,7 +2,7 @@ import { Router } from "express";
 import { addIdososEmEvento, createEvento, getEvento, getEventoById, updateEvento, deleteEvento } from "../controllers/eventoController";
 import { authenticate } from "../middlewares/autenticacaoMiddleware";
 import { upload } from "../config/multer";
-import { verifyCoordenador } from "../middlewares/verificarCoordenador";
+import { verifyCoordenador } from "../middlewares/verificarUser";
 
 const routerEvento = Router();
 

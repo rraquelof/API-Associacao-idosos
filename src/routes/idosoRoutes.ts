@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { createIdoso, getIdosos, getIdosoById, updateIdoso, deleteIdoso } from "../controllers/idosoCotroller";
 import { authenticate } from "../middlewares/autenticacaoMiddleware";
-import { verifyCoordenador } from "../middlewares/verificarCoordenador";
+import { verifyCoordenador } from "../middlewares/verificarUser";
 
 const routerIdoso = Router();
 
