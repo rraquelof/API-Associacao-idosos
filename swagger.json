@@ -888,7 +888,7 @@
       }
     },
     "/eventos/{id}/idosos": {
-      "put": {
+      "post": {
         "summary": "Adicionar idosos em um evento",
         "tags": [
           "Eventos"
