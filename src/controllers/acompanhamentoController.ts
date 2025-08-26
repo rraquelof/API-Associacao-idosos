@@ -26,14 +26,19 @@ export const getAllAcompanhamentos = async (req:Request, res: Response) => {
         return res.status(200).json(acompanhamentos);
 };
 
-// Acompanhamentos do familiar logado
-export const getAcompanhamentosByFamiliar = async (req: Request, res: Response) => {
-        if (req.user?.tipo !== "familiar") {
-            return res.status(403).json({ message: "Acesso negado" });
+export const getAcompanhamentosById = async (req: Request, res: Response) => {
+        const { id } = req.params; 
+
+        const acompanhamento = await Acompanhamento.findById(id)
+            .populate("usuario")
+            .populate("idoso");
+
+        if (!acompanhamento) {
+            return res.status(404).json({ message: "Acompanhamento não encontrado" });
         }
 
-       const acompanhamentos = await Acompanhamento.find({ usuario: req.user.id }).populate("idoso");
-       return res.json(acompanhamentos);
+        return res.status(200).json(acompanhamento);
+
 };
 
 export const deleteAcompanhamento = async (req: Request, res: Response) => {

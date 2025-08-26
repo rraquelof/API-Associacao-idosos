@@ -530,41 +530,7 @@
             }
           },
           "403": {
-            "description": "Acesso negado: apenas coordenadores podem realizar esta ação"
-          },
-          "500": {
-            "description": "Erro interno do servidor"
-          }
-        }
-      }
-    },
-    "/acompanhamento/familiar": {
-      "get": {
-        "summary": "Listar acompanhamentos do familiar logado",
-        "tags": [
-          "Acompanhamentos"
-        ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Lista de acompanhamentos do familiar",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Acompanhamento"
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Acesso negado: apenas familiares podem realizar esta ação"
+            "description": "Acesso negado: apenas coordenadores ou familiares podem realizar esta ação"
           },
           "500": {
             "description": "Erro interno do servidor"
@@ -573,6 +539,48 @@
       }
     },
     "/acompanhamento/{id}": {
+      "get": {
+        "summary": "Buscar acompanhamento por ID",
+        "tags": [
+          "Acompanhamentos"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Acompanhamento encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Acompanhamento"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores ou familiares podem realizar esta ação"
+          },
+          "404": {
+            "description": "Acompanhamento não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
       "put": {
         "summary": "Atualizar acompanhamento",
         "tags": [
@@ -973,9 +981,6 @@
           "400": {
             "description": "Erro de validação"
           },
-          "401": {
-            "description": "Somente enfermeiros podem registrar acompanhamento de saúde"
-          },
           "404": {
             "description": "Idoso não encontrado"
           },
@@ -985,25 +990,15 @@
         }
       }
     },
-    "/saudeIdoso/{idosoId}": {
+    "/saude": {
       "get": {
-        "summary": "Listar registros de saúde de um idoso",
+        "summary": "Listar todos os registros de saúde",
         "tags": [
           "Saúde"
         ],
         "security": [
           {
             "BearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "idosoId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1029,13 +1024,13 @@
         }
       }
     },
-    "/saudeIdoso/{id}": {
+    "/saude/{id}": {
       "get": {
         "summary": "Obter registro de saúde por ID",
         "tags": [
           "Saúde"
         ],
-        "security": [
+         "security": [
           {
             "BearerAuth": []
           }
@@ -1052,17 +1047,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Registro de saúde encontrado",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Saude"
-                }
-              }
-            }
+            "description": "Registro de saúde encontrado"
           },
           "404": {
-            "description": "Nenhum registro de consulta encontrado"
+            "description": "Registro não encontrado"
           },
           "500": {
             "description": "Erro interno do servidor"
@@ -1094,7 +1082,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SaudeCreate"
+                "$ref": "#/components/schemas/Saude"
               }
             }
           }
@@ -1104,7 +1092,10 @@
             "description": "Registro de saúde atualizado com sucesso"
           },
           "404": {
-            "description": "Nenhum registro de consulta encontrado"
+            "description": "Registro de saúde não encontrado"
+          },
+          "403": {
+            "description": "Acesso negado"
           },
           "500": {
             "description": "Erro interno do servidor"
@@ -1136,10 +1127,10 @@
             "description": "Registro de saúde deletado com sucesso"
           },
           "403": {
-            "description": "Acesso negado: apenas enfermeiros ou coordenadores podem deletar"
+            "description": "Acesso negado"
           },
           "404": {
-            "description": "Nenhum registro de consulta encontrado."
+            "description": "Registro de saúde não encontrado"
           },
           "500": {
             "description": "Erro interno do servidor"
@@ -1160,9 +1151,6 @@
             "type": "string",
             "format": "email"
           },
-          "cpf": {
-            "type": "string"
-          },
           "senha": {
             "type": "string"
           },
@@ -1170,29 +1158,15 @@
             "type": "string",
             "enum": [
               "coordenador",
-              "familiar",
-              "enfermeiro"
+              "familiar"
             ]
-          },
-          "sexo": {
-            "type": "string"
-          },
-          "endereco": {
-            "type": "string"
-          },
-          "telefone": {
-            "type": "string"
           }
         },
         "required": [
           "nome",
           "email",
-          "cpf",
           "senha",
-          "tipo",
-          "sexo",
-          "endereco",
-          "telefone"
+          "tipo"
         ]
       },
       "Idoso": {
@@ -1210,7 +1184,7 @@
           "sus": {
             "type": "string"
           },
-          "data_nascimento": {
+          "dataNascimento": {
             "type": "string",
             "format": "date"
           },
@@ -1229,7 +1203,7 @@
           "cpf",
           "rg",
           "sus",
-          "data_nascimento",
+          "dataNascimento",
           "sexo",
           "nacionalidade",
           "naturalidade"
@@ -1278,7 +1252,8 @@
             }
           },
           "imagem": {
-            "type": "string"
+            "type": "string",
+            "format": "binary"
           }
         },
         "required": [
@@ -1291,45 +1266,25 @@
       "Saude": {
         "type": "object",
         "properties": {
-          "usuarioId": {
-            "type": "string"
-          },
           "idosoId": {
             "type": "string"
           },
-          "dataConsulta": {
+          "tipoConsulta": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "data": {
             "type": "string",
             "format": "date-time"
-          },
-          "altura": {
-            "type": "number"
-          },
-          "peso": {
-            "type": "number"
-          },
-          "pressao": {
-            "type": "string"
-          },
-          "alergias": {
-            "type": "string"
-          },
-          "glicemia": {
-            "type": "number"
-          },
-          "doencasCronicas": {
-            "type": "string"
-          },
-          "estadoNutricional": {
-            "type": "string"
           }
         },
         "required": [
-          "usuarioId",
           "idosoId",
-          "altura",
-          "peso",
-          "pressao",
-          "estadoNutricional"
+          "tipoConsulta",
+          "descricao",
+          "data"
         ]
       }
     },

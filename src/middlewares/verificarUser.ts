@@ -17,4 +17,11 @@ export const verifyEnfermeiro = (req: Request, res: Response, next: NextFunction
     });
   }
   next();
-}
+};
+export const verifyFamiliar = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user.tipo !== "familiar") {
+    return res.status(403).json({ message: "Somente familiares podem realizar esta ação."
+    });
+  }
+  next();
+};

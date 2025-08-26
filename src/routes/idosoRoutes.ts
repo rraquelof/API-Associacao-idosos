@@ -6,8 +6,8 @@ import { verifyCoordenador } from "../middlewares/verificarUser";
 const routerIdoso = Router();
 
 routerIdoso.post('/cadastrarIdoso', authenticate, verifyCoordenador, createIdoso);
-routerIdoso.get('/idosos', getIdosos);
-routerIdoso.get('/idoso/:id', authenticate, verifyCoordenador, getIdosoById);
+routerIdoso.get('/idosos', authenticate, getIdosos);
+routerIdoso.get('/idoso/:id', authenticate, getIdosoById);
 routerIdoso.put('/idoso/:id', authenticate, verifyCoordenador, updateIdoso);
 routerIdoso.delete('/idoso/:id', authenticate, verifyCoordenador, deleteIdoso);
 

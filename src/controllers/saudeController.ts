@@ -24,27 +24,27 @@ export const createSaude = async (req: Request, res: Response) => {
 }
 
 export const getSaude = async (req: Request, res: Response) => {
-    const { idosoId } = req.params; 
+  const consultas = await Saude.find().sort({ dataConsulta: -1 });
 
-    // Busca todos os registros do idoso
-    const consulta = await Saude.find({ idoso: idosoId }).sort({ dataConsulta: -1 });
-
-    if (consulta.length === 0) {
-      return res.status(404).json({ message: "Nenhum registro de consulta encontrado" });
-    }
-
-    return res.status(200).json(consulta);
-}
-
-export const getSaudeById = async (req: Request, res: Response) => {
-  const consulta = await Saude.find({ idosoId: req.params.idosoId }).sort({ dataConsulta: -1 }); 
-
-  if (consulta.length === 0) {
+  if (consultas.length === 0) {
     return res.status(404).json({ message: "Nenhum registro de consulta encontrado." });
   }
 
+  return res.status(200).json(consultas);
+};
+
+export const getSaudeById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const consulta = await Saude.findById(id);
+
+  if (!consulta) {
+    return res
+      .status(404)
+      .json({ message: "Nenhum registro de consulta encontrado." });
+  }
+
   return res.status(200).json(consulta);
-}
+};
 
 export const putSaude = async (req: Request, res: Response) => {
   const { id } = req.params;
