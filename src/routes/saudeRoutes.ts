@@ -7,7 +7,7 @@ const routerSaude = Router();
 
 routerSaude.post('/cadastrarConsulta', authenticate, verifyEnfermeiro, createSaude);
 routerSaude.get('/saudeIdoso', authenticate, getSaude);
-routerSaude.get('/saudeIdoso/:Id', authenticate, getSaudeById);
+routerSaude.get('/saudeIdoso/:id', authenticate, getSaudeById);
 routerSaude.put('/saudeIdoso/:id', authenticate, verifyEnfermeiro, putSaude);
 routerSaude.delete('/saudeIdoso/:id', authenticate, verifyEnfermeiro, deleteSaude); 
 

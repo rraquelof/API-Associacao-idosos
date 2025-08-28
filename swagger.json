@@ -24,9 +24,76 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/User"
-              }
+              },
+              "examples": {
+                "Maria": {
+                  "summary": "Familiar (Maria)",
+                  "value": {
+                    "nome": "Maria familiar",
+                    "email": "maria.familiar@gmail.com",
+                    "cpf": "293.392.948-04",
+                    "senha": "senha123",
+                    "tipo": "familiar",
+                    "sexo": "feminino",
+                    "endereco": "Rua das festas",
+                    "telefone": "3923489033"
+                  }
+                },
+                "José": {
+                  "summary": "Familiar (José)",
+                  "value": {
+                    "nome": "José familiar",
+                    "email": "josefamiliar@example.com",
+                    "cpf": "023.456.789-00",
+                    "senha": "senha123",
+                    "tipo": "familiar",
+                    "sexo": "masculino",
+                    "endereco": "Rua da paz",
+                    "telefone": "11987654321"
+                  }
+                },
+                "João": {
+                  "summary": "Enfermeiro (João)",
+                  "value": {
+                    "nome": "João enfermeiro",
+                    "email": "joao.enfermeiro@gmail.com",
+                    "cpf": "123.456.789-00",
+                    "senha": "senha123",
+                    "tipo": "enfermeiro",
+                    "sexo": "masculino",
+                    "endereco": "Rua das pedras",
+                    "telefone": "8372509931"
+                  }
+                },
+                "Kiko": {
+                  "summary": "Voluntário (Kiko)",
+                  "value": {
+                    "nome": "Kiko voluntário",
+                    "email": "kiko.voluntario@gmail.com",
+                    "cpf": "293.094.948-04",
+                    "senha": "senha123",
+                    "tipo": "voluntario",
+                    "sexo": "masculino",
+                    "endereco": "Rua da música",
+                    "telefone": "3923489033"
+                  }
+                },
+                "Ana": {
+                  "summary": "Admin (Ana)",
+                  "value": {
+                    "nome": "Ana admin",
+                    "email": "ana.admin@gmail.com",
+                    "cpf": "123.456.789-01",
+                    "senha": "senha123",
+                    "tipo": "coordenador",
+                    "sexo": "feminino",
+                    "endereco": "Rua das flores",
+                    "telefone": "11987654321"
+                  }
             }
           }
+        }
+      }
         },
         "responses": {
           "201": {
@@ -265,7 +332,48 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/Idoso"
-              }
+              },
+              "examples":{
+                "João": {
+                  "summary": "João (idoso)",
+                  "value": {
+                    "nome": "João da Silva",
+                    "cpf": "123.456.789-00",
+                    "rg": "1.234.234",
+                    "sus": "123456789012345",
+                    "data_nascimento": "1940-05-10",
+                    "sexo": "masculino",
+                    "nacionalidade": "Brasileiro",
+                    "naturalidade": "São Paulo - SP"
+                  }
+                },
+                "Maria de Lourdes": {
+                  "summary": "Maria (idoso)",
+                  "value": {
+                    "nome": "Maria de Lourdes Santos",
+                    "cpf": "987.654.321-11",
+                    "rg": "9.345.324",
+                    "sus": "987654321098765",
+                    "data_nascimento":"1940-05-10",
+                    "sexo": "feminino",
+                    "nacionalidade": "Brasileira",
+                    "naturalidade": "Belo Horizonte - MG"
+                  }
+                },
+                "Antônio": {
+                  "summary": "Antônio (idoso)",
+                  "value": {
+                    "nome": "Antônio Carlos Pereira",
+                    "cpf": "456.789.123-22",
+                    "rg": "4.675.765",
+                    "sus": "456789123456789",
+                    "data_nascimento": "1949-11-05",
+                    "sexo": "masculino",
+                    "nacionalidade": "Brasileiro",
+                    "naturalidade": "Curitiba - PR"
+                  }
+            }
+          }
             }
           }
         },
@@ -990,7 +1098,7 @@
         }
       }
     },
-    "/saude": {
+    "/saudeIdoso": {
       "get": {
         "summary": "Listar todos os registros de saúde",
         "tags": [
@@ -1024,7 +1132,7 @@
         }
       }
     },
-    "/saude/{id}": {
+    "/saudeIdoso/{id}": {
       "get": {
         "summary": "Obter registro de saúde por ID",
         "tags": [
@@ -1151,6 +1259,9 @@
             "type": "string",
             "format": "email"
           },
+          "cpf": {
+            "type": "string"
+          },
           "senha": {
             "type": "string"
           },
@@ -1160,13 +1271,31 @@
               "coordenador",
               "familiar"
             ]
+          },
+          "sexo": {
+            "type": "string",
+            "enum": [
+              "masculino",
+              "feminino",
+              "outro"
+            ]
+          },
+          "endereco": {
+            "type": "string"
+          },
+          "telefone": {
+            "type": "string"
           }
         },
         "required": [
           "nome",
           "email",
+          "cpf",
           "senha",
-          "tipo"
+          "tipo",
+          "sexo",
+          "endereco",
+          "telefone"
         ]
       },
       "Idoso": {
@@ -1184,7 +1313,7 @@
           "sus": {
             "type": "string"
           },
-          "dataNascimento": {
+          "data_nascimento": {
             "type": "string",
             "format": "date"
           },
@@ -1203,7 +1332,7 @@
           "cpf",
           "rg",
           "sus",
-          "dataNascimento",
+          "data_nascimento",
           "sexo",
           "nacionalidade",
           "naturalidade"
@@ -1266,26 +1395,18 @@
       "Saude": {
         "type": "object",
         "properties": {
-          "idosoId": {
-            "type": "string"
-          },
-          "tipoConsulta": {
-            "type": "string"
-          },
-          "descricao": {
-            "type": "string"
-          },
-          "data": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "usuarioId": { "type": "string" },
+          "idosoId": { "type": "string" },
+          "dataConsulta": { "type": "string", "format": "date-time" },
+          "altura": { "type": "number" },
+          "peso": { "type": "number" },
+          "pressao": { "type": "string" },
+          "alergias": { "type": "array", "items": { "type": "string" } },
+          "glicemia": { "type": "number" },
+          "doencasCronicas": { "type": "array", "items": { "type": "string" } },
+          "estadoNutricional": { "type": "string", "enum": ["normal","baixo peso","sobrepeso"] }
         },
-        "required": [
-          "idosoId",
-          "tipoConsulta",
-          "descricao",
-          "data"
-        ]
+        "required": ["usuarioId","idosoId","altura","peso","pressao","estadoNutricional"]
       }
     },
     "securitySchemes": {
