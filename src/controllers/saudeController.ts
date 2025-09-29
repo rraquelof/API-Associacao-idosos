@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import Idoso from "../models/idoso";
 import Saude from "../models/Saude";
 import { createSaudeSchema } from "../validations/saudeValidations";
-import Usuario from "../models/usuario";
 
 export const createSaude = async (req: Request, res: Response) => {
     const { usuarioId, idosoId } = req.body;

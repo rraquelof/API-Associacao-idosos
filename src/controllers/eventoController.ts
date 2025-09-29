@@ -11,6 +11,9 @@ export const createEvento = async (req: Request, res: Response) => {
     if (body.local && typeof body.local === "string") {
       body.local = JSON.parse(body.local);
     }
+    if (body.idosos && typeof body.idosos === "string") {
+  body.idosos = JSON.parse(body.idosos);
+}
     // Adiciona o caminho da imagem
     if (req.file) {
       body.imagem = `/uploads/${req.file.filename}`;
@@ -46,7 +49,13 @@ export const getEvento = async (req: Request, res: Response) => {
   if(!evento){
     return res.status(404).json({ message: "Nenhum evento encontrado"});
   }
-  res.status(200).json(evento);
+    const host = req.protocol + '://' + req.get('host'); // http://localhost:3000
+  const eventosComLink = evento.map(e => ({
+    ...e.toObject(), // converte de mongoose document para objeto JS
+    imagem: e.imagem ? `${host}${e.imagem}` : null
+  }));
+
+  res.status(200).json(eventosComLink);
 }
 
 export const getEventoById = async (req: Request, res: Response) =>{
