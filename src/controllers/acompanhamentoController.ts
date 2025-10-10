@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Idoso from "../models/idoso";
-import Usuario from "../models/usuario";
-import Acompanhamento from "../models/acompanhamento";
+import Usuario from "../models/Usuario";
+import Acompanhamento from "../models/Acompanhamento";
 
 export const createAcompanhamento = async (req: Request, res: Response) => {
         const { usuarioId, idosoId } = req.body;
