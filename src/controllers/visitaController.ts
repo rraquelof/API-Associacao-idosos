@@ -11,3 +11,22 @@ export const createVisita = async (req: Request, res: Response) => {
     res.status(201).json(newVisita);
 
 }
+
+export const getVisitas = async (req: Request, res: Response) => {
+    const { data } = req.query;
+    const filtro = data ? { data } : {};
+    const visitas = await Visita.find(filtro);
+    res.status(200).json(visitas);
+}
+
+export const updateVisita = async (req: Request, res: Response) => {
+    const visita = await Visita.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    if (!visita) return res.status(404).json({ message: "Visita não encontrada" });
+    res.status(200).json({ message: "Visita atualizada com sucesso" });
+}
+
+export const deleteVisita = async (req: Request, res: Response) => {
+    const visita = await Visita.findByIdAndDelete(req.params.id);
+    if (!visita) return res.status(404).json({ message: "Visita não encontrada" });
+    res.status(200).json({ message: "Visita removida" });
+}
