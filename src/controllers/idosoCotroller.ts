@@ -46,7 +46,7 @@ export const getIdosoById = async (req: Request, res: Response) => {
 
 export const updateIdoso = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const data = createIdosoSchema.parse(req.body);
+  const data = createIdosoSchema.partial().parse(req.body);
 
   const idosoUpdate = await Idoso.findByIdAndUpdate(id, data, { new: true });
 
