@@ -46,8 +46,20 @@ export interface IIdoso extends Document {
     familiaAmpliada?: string;
     interessadosNoIdoso?: string;
     programaSocialDaFamilia?: string;
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticia?: string;
+    quemEAtendidoNoProgramaSocialDaFamilia?: string;
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaNome?: string;
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaIdade?: string;
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaParentesco?: string;
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaProfisao?: string;
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaReligiao?: string;
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaEscolaridade?: string;
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaContato?: string;
     infraestutura?: string;
+    familiaAtendidaPorServicosDeSaúde?: string;
+    servicoDeSaudeQueAtendeAFamilia?: string;
+    localServicoDeSaudeQueAtendeAFamilia?: string;
+    quemServicoDeSaudeQueAtendeAFamilia?: string;
+    observacoesServicoDeSaude?: string;
     condicoesDeHabilidade?: string;
     infraestruturaDeComunidade?: string;
     familiaAtendidaPorServicosDeSaude?: string;
@@ -119,8 +131,20 @@ const idosoSchema: Schema = new Schema({
     familiaAmpliada: { type: String },
     interessadosNoIdoso: { type: String },
     programaSocialDaFamilia: { type: String },
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticia: { type: String },
+    quemEAtendidoNoProgramaSocialDaFamilia: { type: String },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaNome: { type: String },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaIdade: { type: String },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaParentesco: { type: String },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaProfisao: { type: String },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaReligiao: { type: String },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaEscolaridade: { type: String },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaContato: { type: String },
     infraestutura: { type: String },
+    familiaAtendidaPorServicosDeSaúde: { type: String },
+    servicoDeSaudeQueAtendeAFamilia: { type: String },
+    localServicoDeSaudeQueAtendeAFamilia: { type: String },
+    quemServicoDeSaudeQueAtendeAFamilia: { type: String },
+    observacoesServicoDeSaude: { type: String },
     condicoesDeHabilidade: { type: String },
     infraestruturaDeComunidade: { type: String },
     familiaAtendidaPorServicosDeSaude: { type: String },
