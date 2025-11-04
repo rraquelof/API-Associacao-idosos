@@ -1,9 +1,12 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { required } from "zod/v4/core/util.cjs";
 
 export interface IIdoso extends Document {
     nome: string;
     cpf: string;
     rg: string;
+    dataEmissaoRg: Date;
+    orgaoEmissorRg: string;
     sus: string;
     data_nascimento: Date;
     sexo: string;
@@ -20,22 +23,22 @@ export interface IIdoso extends Document {
     folha?: string;
     livro?: string;
     cartorio?: string;
-    dataEmissao?: Date;
-    orgaoEmissor?: string;
     ctps?: string;
     serie?: string;
     pis?: string;
     tituloEleitor?: string;
+    zonaTituloEleitor?: string;
+    secaoTituloEleitor?: string;
     observacoes?: string;
-    dataAcolhimento?: Date;
-    localAcolhimento?: string;
+    dataAcolhimento: Date;
+    localAcolhimento: string;
     encaminhadoPor?: string;
-    motivoDoAcolhimentoConformeOrgaoEmissor?: string;
+    motivoDoAcolhimentoConformeOrgaoEmissor: string;
     documentacaoRecebida?: string;
-    condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia?: string;
-    condicoesDeHigieneNoMomentoDoAcolhimento?: string;
-    reacoesEComportamentos?: string;
-    sinasDeViolencia?: string;
+    condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: string;
+    condicoesDeHigieneNoMomentoDoAcolhimento: string;
+    reacoesEComportamentos: string;
+    sinasDeViolencia: string;
     instituicaoAcolhimentoAnterior?: string;
     dataEntradaAcolhimentoAnterior?: Date;
     dataSaidaAcolhimentoAnterior?: Date;
@@ -81,6 +84,8 @@ const idosoSchema: Schema = new Schema({
     nome: { type: String, required: true },
     cpf: { type: String, required: true, unique: true },
     rg: { type: String, required: true, unique: true },
+    dataEmissaoRg: { type: Date, required: true },
+    orgaoEmissorRg: { type: String, required: true },
     sus: { type: String, required: true, unique: true },
     data_nascimento: { type: Date, required: true },
     sexo: { type: String, required: true },
@@ -99,24 +104,24 @@ const idosoSchema: Schema = new Schema({
     folha: { type: String },
     livro: { type: String },
     cartorio: { type: String },
-    dataEmissao: { type: Date },
-    orgaoEmissor: { type: String },
     ctps: { type: String },
     serie: { type: String },
     pis: { type: String },
     tituloEleitor: { type: String },
+    zonaTituloEleitor: { type: String },
+    secaoTituloEleitor: { type: String },
     observacoes: { type: String },
 
     // Dados do acolhimento
-    dataAcolhimento: { type: Date },
-    localAcolhimento: { type: String },
-    encaminhadoPor: { type: String },
-    motivoDoAcolhimentoConformeOrgaoEmissor: { type: String },
+    dataAcolhimento: { type: Date, required: true },
+    localAcolhimento: { type: String, required: true },
+    encaminhadoPor: { type: String, required: true },
+    motivoDoAcolhimentoConformeOrgaoEmissor: { type: String, required: true },
     documentacaoRecebida: { type: String },
-    condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: { type: String },
-    condicoesDeHigieneNoMomentoDoAcolhimento: { type: String },
-    reacoesEComportamentos: { type: String },
-    sinasDeViolencia: { type: String },
+    condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: { type: String, required: true },
+    condicoesDeHigieneNoMomentoDoAcolhimento: { type: String, required: true },
+    reacoesEComportamentos: { type: String, requeired: true },
+    sinasDeViolencia: { type: String, required: true },
 
     // Histórico de acolhimento anterior
     instituicaoAcolhimentoAnterior: { type: String },
