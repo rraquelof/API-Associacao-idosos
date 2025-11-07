@@ -1,85 +1,90 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { required } from "zod/v4/core/util.cjs";
 
 export interface IIdoso extends Document {
-    nome: string;
-    cpf: string;
-    rg: string;
-    dataEmissaoRg: Date;
-    orgaoEmissorRg: string;
-    sus: string;
-    data_nascimento: Date;
-    sexo: string;
-    nacionalidade: string;
-    naturalidade: string;
-    foto?: string;
-    nomePai?: string;
-    nomeMae?: string;
-    responsavel?: string;
-    ultimoEnderecoDoAcolhido?: string;
-    cidade?: string;
-    contato?: string;
-    numCertidaoNascimento?: string;
-    folha?: string;
-    livro?: string;
-    cartorio?: string;
-    ctps?: string;
-    serie?: string;
-    pis?: string;
-    tituloEleitor?: string;
-    zonaTituloEleitor?: string;
-    secaoTituloEleitor?: string;
-    observacoes?: string;
-    dataAcolhimento: Date;
-    localAcolhimento: string;
-    encaminhadoPor?: string;
-    motivoDoAcolhimentoConformeOrgaoEmissor: string;
-    documentacaoRecebida?: string;
-    condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: string;
-    condicoesDeHigieneNoMomentoDoAcolhimento: string;
-    reacoesEComportamentos: string;
-    sinasDeViolencia: string;
-    instituicaoAcolhimentoAnterior?: string;
-    dataEntradaAcolhimentoAnterior?: Date;
-    dataSaidaAcolhimentoAnterior?: Date;
-    motivoAcolhimentoAnterior?: string;
-    motivoDesacolhimentoAnterior?: string;
-    encaminhamentosFamiliaAnteriormenteAoAcolhimento?: string;
-    arranjoFamiliar?: string;
-    familiaAmpliada?: string;
-    interessadosNoIdoso?: string;
-    programaSocialDaFamilia?: string;
-    quemEAtendidoNoProgramaSocialDaFamilia?: string;
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaNome?: string;
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaIdade?: string;
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaParentesco?: string;
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaProfisao?: string;
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaReligiao?: string;
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaEscolaridade?: string;
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaContato?: string;
-    infraestutura?: string;
-    familiaAtendidaPorServicosDeSaúde?: string;
-    servicoDeSaudeQueAtendeAFamilia?: string;
-    localServicoDeSaudeQueAtendeAFamilia?: string;
-    quemServicoDeSaudeQueAtendeAFamilia?: string;
-    observacoesServicoDeSaude?: string;
-    condicoesDeHabilidade?: string;
-    infraestruturaDeComunidade?: string;
-    familiaAtendidaPorServicosDeSaude?: string;
-    relacaoComFamilia?: string;
-    percepcaoDaFamiliaSobreIdoso?: string;
-    percepcaoIdosoSobreFamilia?: string;
-    percepcaoEquipeTecnicaSobreRelacaoFamiliar?: string;
-    IdosoRecebeVisita?: boolean;
-    comportamentosIdosoDuranteVisita?: string;
-    comportamentosFamiliaresDuranteVisita?: string;
-    nomeIrmaos?: string;
-    idadeIrmaos?: string;
-    localIrmaos?: string;
-    parecerEquipeTecnica?: string;
+  nome: string;
+  cpf: string;
+  rg: string;
+  dataEmissaoRg: Date;
+  orgaoEmissorRg: string;
+  sus: string;
+  dataNascimento: Date;
+  sexo: string;
+  nacionalidade: string;
+  naturalidade: string;
+  foto?: string;
+  nomePai?: string;
+  nomeMae?: string;
+  responsavel?: string;
+  ultimoEnderecoDoAcolhido?: string;
+  cidade?: string;
+  contato?: string;
+  numCertidaoNascimento?: string;
+  folha?: string;
+  livro?: string;
+  cartorio?: string;
+  ctps?: string;
+  serie?: string;
+  pis?: string;
+  tituloEleitor?: string;
+  zonaTituloEleitor?: string;
+  secaoTituloEleitor?: string;
+  observacoesDadosPessoais?: string;
+  dataAcolhimento: Date;
+  localAcolhimento: string;
+  encaminhadoPor?: string;
+  motivoDoAcolhimentoConformeOrgaoEmissor: string;
+  documentacaoRecebida?: string;
+  condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: string;
+  condicoesDeHigieneNoMomentoDoAcolhimento: string;
+  reacoesEComportamentos: string;
+  sinasDeViolencia: string;
+  instituicaoAcolhimentoAnterior?: string;
+  dataEntradaAcolhimentoAnterior?: Date;
+  dataSaidaAcolhimentoAnterior?: Date;
+  motivoAcolhimentoAnterior?: string;
+  motivoDesacolhimentoAnterior?: string;
+  encaminhamentosFamiliaAnteriormenteAoAcolhimento?: string;
+  observacoesAcolhimento?: string;
+  arranjoFamiliar?: string;
+  familiaAmpliada?: string;
+  interessadosNoIdoso?: string;
+  familiaAtendidaPorProgramaSocial?: string;
+  programaSocialDaFamilia?: string;
+  quemEAtendidoNoProgramaSocialDaFamilia?: string;
+  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticia?: String;
+  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaNome?: string;
+  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaIdade?: string;
+  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaParentesco?: string;
+  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaProfisao?: string;
+  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaReligiao?: string;
+  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaEscolaridade?: string;
+  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaContato?: string;
+  infraestutura?: string;
+  familiaAtendidaPorProgramaSaude?: string;
+  servicoDeSaudeQueAtendeAFamilia?: string;
+  localServicoDeSaudeQueAtendeAFamilia?: string;
+  quemServicoDeSaudeQueAtendeAFamilia?: string;
+  observacoesServicoDeSaude?: string;
+  condicoesDeHabilidade?: string;
+  infraestruturaDeComunidade?: string;
+  relacaoComFamilia?: string;
+  percepcaoDaFamiliaSobreIdoso?: string;
+  percepcaoIdosoSobreFamilia?: string;
+  percepcaoEquipeTecnicaSobreRelacaoFamiliar?: string;
+  observacoesRelacaoFamiliar?: string;
+  IdosoRecebeVisita?: boolean;
+  comportamentosIdosoDuranteVisita?: string;
+  comportamentosFamiliaresDuranteVisita?: string;
+  idosoTemIrmaos?: string;
+  nomeIrmaos?: string;
+  idadeIrmaos?: string;
+  localIrmaos?: string;
+  parecerEquipeTecnica?: string;
+  reavaliacao?: string;
 }
 
-const idosoSchema: Schema = new Schema({
+const idosoSchema: Schema = new Schema(
+  {
     // Dados básicos
     nome: { type: String, required: true },
     cpf: { type: String, required: true, unique: true },
@@ -87,7 +92,7 @@ const idosoSchema: Schema = new Schema({
     dataEmissaoRg: { type: Date, required: true },
     orgaoEmissorRg: { type: String, required: true },
     sus: { type: String, required: true, unique: true },
-    data_nascimento: { type: Date, required: true },
+    dataNascimento: { type: Date, required: true },
     sexo: { type: String, required: true },
     nacionalidade: { type: String, required: true },
     naturalidade: { type: String, required: true },
@@ -110,7 +115,7 @@ const idosoSchema: Schema = new Schema({
     tituloEleitor: { type: String },
     zonaTituloEleitor: { type: String },
     secaoTituloEleitor: { type: String },
-    observacoes: { type: String },
+    observacoesDadosPessoais: { type: String },
 
     // Dados do acolhimento
     dataAcolhimento: { type: Date, required: true },
@@ -118,7 +123,10 @@ const idosoSchema: Schema = new Schema({
     encaminhadoPor: { type: String, required: true },
     motivoDoAcolhimentoConformeOrgaoEmissor: { type: String, required: true },
     documentacaoRecebida: { type: String },
-    condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: { type: String, required: true },
+    condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: {
+      type: String,
+      required: true,
+    },
     condicoesDeHigieneNoMomentoDoAcolhimento: { type: String, required: true },
     reacoesEComportamentos: { type: String, requeired: true },
     sinasDeViolencia: { type: String, required: true },
@@ -130,22 +138,41 @@ const idosoSchema: Schema = new Schema({
     motivoAcolhimentoAnterior: { type: String },
     motivoDesacolhimentoAnterior: { type: String },
     encaminhamentosFamiliaAnteriormenteAoAcolhimento: { type: String },
+    observacoesAcolhimento: { type: String },
 
     // Família e condições sociais
     arranjoFamiliar: { type: String },
     familiaAmpliada: { type: String },
     interessadosNoIdoso: { type: String },
+    familiaAtendidaPorProgramaSocial: { type: String },
     programaSocialDaFamilia: { type: String },
     quemEAtendidoNoProgramaSocialDaFamilia: { type: String },
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaNome: { type: String },
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaIdade: { type: String },
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaParentesco: { type: String },
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaProfisao: { type: String },
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaReligiao: { type: String },
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaEscolaridade: { type: String },
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaContato: { type: String },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticia: {
+      type: String,
+    },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaNome: {
+      type: String,
+    },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaIdade: {
+      type: String,
+    },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaParentesco: {
+      type: String,
+    },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaProfisao: {
+      type: String,
+    },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaReligiao: {
+      type: String,
+    },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaEscolaridade: {
+      type: String,
+    },
+    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaContato: {
+      type: String,
+    },
     infraestutura: { type: String },
-    familiaAtendidaPorServicosDeSaúde: { type: String },
+    familiaAtendidaPorProgramaSaude: { type: String },
     servicoDeSaudeQueAtendeAFamilia: { type: String },
     localServicoDeSaudeQueAtendeAFamilia: { type: String },
     quemServicoDeSaudeQueAtendeAFamilia: { type: String },
@@ -157,6 +184,7 @@ const idosoSchema: Schema = new Schema({
     percepcaoDaFamiliaSobreIdoso: { type: String },
     percepcaoIdosoSobreFamilia: { type: String },
     percepcaoEquipeTecnicaSobreRelacaoFamiliar: { type: String },
+    observacoesRelacaoFamiliar: { type: String },
 
     // Visitas e comportamentos
     IdosoRecebeVisita: { type: Boolean },
@@ -164,13 +192,16 @@ const idosoSchema: Schema = new Schema({
     comportamentosFamiliaresDuranteVisita: { type: String },
 
     // Irmãos
+    idosoTemIrmaos: { type: String },
     nomeIrmaos: { type: String },
     idadeIrmaos: { type: String },
     localIrmaos: { type: String },
 
     // Avaliação técnica
     parecerEquipeTecnica: { type: String },
+    reavaliacao: { type: String },
+  },
+  { timestamps: true }
+);
 
-}, { timestamps: true });
-
-export default mongoose.model<IIdoso>('Idoso', idosoSchema);
+export default mongoose.model<IIdoso>("Idoso", idosoSchema);
