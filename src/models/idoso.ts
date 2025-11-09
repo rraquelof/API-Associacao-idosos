@@ -72,7 +72,7 @@ export interface IIdoso extends Document {
   percepcaoIdosoSobreFamilia?: string;
   percepcaoEquipeTecnicaSobreRelacaoFamiliar?: string;
   observacoesRelacaoFamiliar?: string;
-  IdosoRecebeVisita?: boolean;
+  IdosoRecebeVisita?: string;
   comportamentosIdosoDuranteVisita?: string;
   comportamentosFamiliaresDuranteVisita?: string;
   idosoTemIrmaos?: string;
@@ -187,7 +187,7 @@ const idosoSchema: Schema = new Schema(
     observacoesRelacaoFamiliar: { type: String },
 
     // Visitas e comportamentos
-    IdosoRecebeVisita: { type: Boolean },
+    IdosoRecebeVisita: { type: String },
     comportamentosIdosoDuranteVisita: { type: String },
     comportamentosFamiliaresDuranteVisita: { type: String },
 
