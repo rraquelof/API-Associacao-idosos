@@ -51,7 +51,7 @@ export interface IIdoso extends Document {
   familiaAtendidaPorProgramaSocial?: string;
   programaSocialDaFamilia?: string;
   quemEAtendidoNoProgramaSocialDaFamilia?: string;
-  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticia?: String;
+  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticia?: string;
   familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaNome?: string;
   familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaIdade?: string;
   familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticiaParentesco?: string;
