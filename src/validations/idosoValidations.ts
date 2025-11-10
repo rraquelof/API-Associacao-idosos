@@ -65,7 +65,7 @@ export const createIdosoSchema = z.object({
     percepcaoIdosoSobreFamilia: z.string().optional(),
     percepcaoEquipeTecnicaSobreRelacaoFamiliar: z.string().optional(),
 
-    IdosoRecebeVisita: z.boolean().optional(),
+    IdosoRecebeVisita: z.string().optional(),
     comportamentosIdosoDuranteVisita: z.string().optional(),
     comportamentosFamiliaresDuranteVisita: z.string().optional(),
 
