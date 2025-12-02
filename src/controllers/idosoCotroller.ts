@@ -21,13 +21,8 @@ export const createIdoso = async (req: Request, res: Response) => {
 };
 
 export const getIdosos = async (req: Request, res: Response) => {
-  const idosos = await Idoso.find({}, "nome");;
-
-  if (!idosos || idosos.length === 0) {
-    return res.status(404).json({ message: "Nenhum idoso encontrado" });
-  }
-
-  res.status(200).json(idosos);
+  const idosos = await Idoso.find({}, "nome");
+  res.json(idosos);
 };
 
 
