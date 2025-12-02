@@ -120,7 +120,7 @@ const idosoSchema: Schema = new Schema(
     // Dados do acolhimento
     dataAcolhimento: { type: Date, required: true },
     localAcolhimento: { type: String, required: true },
-    encaminhadoPor: { type: String, required: true },
+    encaminhadoPor: { type: String },
     motivoDoAcolhimentoConformeOrgaoEmissor: { type: String, required: true },
     documentacaoRecebida: { type: String },
     condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: {

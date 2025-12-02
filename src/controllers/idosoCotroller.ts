@@ -5,6 +5,7 @@ import { createIdosoSchema } from "../validations/idosoValidations";
 
 export const createIdoso = async (req: Request, res: Response) => {
   const data = createIdosoSchema.parse(req.body);
+  console.log("📩 RECEBIDO DO FRONT NO POST:", req.body);
 
   const cpfExists = await Idoso.findOne({ cpf: data.cpf });
   if (cpfExists) return res.status(400).json({ message: "CPF já está cadastrado" });

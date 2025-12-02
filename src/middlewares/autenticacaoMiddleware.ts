@@ -20,6 +20,7 @@ declare global {
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
     const tokenHeader = req.headers.authorization;
+    
 
     if(!tokenHeader || !tokenHeader.startsWith('Bearer ')){
         return res.status(401).json({ message: "Token não fornecido" });
