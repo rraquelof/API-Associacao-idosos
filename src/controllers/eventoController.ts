@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import Evento from "../models/Evento";
-import { any, ZodError } from "zod";
+import Evento from "../models/evento";
 import { createEventoSchema } from "../validations/eventoValidations";
 
 export const createEvento = async (req: Request, res: Response) => {

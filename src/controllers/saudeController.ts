@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Idoso from "../models/idoso";
-import Saude from "../models/Saude";
+import Saude from "../models/saude";
 import { createSaudeSchema } from "../validations/saudeValidations";
 
 export const createSaude = async (req: Request, res: Response) => {

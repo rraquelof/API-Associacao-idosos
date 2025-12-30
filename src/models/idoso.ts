@@ -127,7 +127,7 @@ const idosoSchema: Schema = new Schema(
       type: String,
     },
     condicoesDeHigieneNoMomentoDoAcolhimento: { type: String},
-    reacoesEComportamentos: { type: String, requeired: true },
+    reacoesEComportamentos: { type: String},
     sinasDeViolencia: { type: String},
 
     // Histórico de acolhimento anterior
