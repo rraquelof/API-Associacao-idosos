@@ -3,14 +3,14 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IIdoso extends Document {
   nome: string;
   cpf: string;
-  rg: string;
-  dataEmissaoRg: Date;
-  orgaoEmissorRg: string;
-  sus: string;
-  dataNascimento: Date;
-  sexo: string;
-  nacionalidade: string;
-  naturalidade: string;
+  rg?: string;
+  dataEmissaoRg?: Date;
+  orgaoEmissorRg?: string;
+  sus?: string;
+  dataNascimento?: Date;
+  sexo?: string;
+  nacionalidade?: string;
+  naturalidade?: string;
   foto?: string;
   nomePai?: string;
   nomeMae?: string;
@@ -29,15 +29,15 @@ export interface IIdoso extends Document {
   zonaTituloEleitor?: string;
   secaoTituloEleitor?: string;
   observacoesDadosPessoais?: string;
-  dataAcolhimento: Date;
-  localAcolhimento: string;
+  dataAcolhimento?: Date;
+  localAcolhimento?: string;
   encaminhadoPor?: string;
-  motivoDoAcolhimentoConformeOrgaoEmissor: string;
+  motivoDoAcolhimentoConformeOrgaoEmissor?: string;
   documentacaoRecebida?: string;
-  condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: string;
-  condicoesDeHigieneNoMomentoDoAcolhimento: string;
-  reacoesEComportamentos: string;
-  sinasDeViolencia: string;
+  condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia?: string;
+  condicoesDeHigieneNoMomentoDoAcolhimento?: string;
+  reacoesEComportamentos?: string;
+  sinasDeViolencia?: string;
   instituicaoAcolhimentoAnterior?: string;
   dataEntradaAcolhimentoAnterior?: Date;
   dataSaidaAcolhimentoAnterior?: Date;
@@ -88,14 +88,14 @@ const idosoSchema: Schema = new Schema(
     // Dados básicos
     nome: { type: String, required: true },
     cpf: { type: String, required: true, unique: true },
-    rg: { type: String, required: true, unique: true },
-    dataEmissaoRg: { type: Date, required: true },
-    orgaoEmissorRg: { type: String, required: true },
-    sus: { type: String, required: true, unique: true },
-    dataNascimento: { type: Date, required: true },
-    sexo: { type: String, required: true },
-    nacionalidade: { type: String, required: true },
-    naturalidade: { type: String, required: true },
+    rg: { type: String, unique: true },
+    dataEmissaoRg: { type: Date},
+    orgaoEmissorRg: { type: String},
+    sus: { type: String, unique: true },
+    dataNascimento: { type: Date},
+    sexo: { type: String},
+    nacionalidade: { type: String},
+    naturalidade: { type: String},
 
     // Dados complementares
     foto: { type: String },
@@ -118,18 +118,17 @@ const idosoSchema: Schema = new Schema(
     observacoesDadosPessoais: { type: String },
 
     // Dados do acolhimento
-    dataAcolhimento: { type: Date, required: true },
-    localAcolhimento: { type: String, required: true },
+    dataAcolhimento: { type: Date},
+    localAcolhimento: { type: String},
     encaminhadoPor: { type: String },
-    motivoDoAcolhimentoConformeOrgaoEmissor: { type: String, required: true },
+    motivoDoAcolhimentoConformeOrgaoEmissor: { type: String},
     documentacaoRecebida: { type: String },
     condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: {
       type: String,
-      required: true,
     },
-    condicoesDeHigieneNoMomentoDoAcolhimento: { type: String, required: true },
+    condicoesDeHigieneNoMomentoDoAcolhimento: { type: String},
     reacoesEComportamentos: { type: String, requeired: true },
-    sinasDeViolencia: { type: String, required: true },
+    sinasDeViolencia: { type: String},
 
     // Histórico de acolhimento anterior
     instituicaoAcolhimentoAnterior: { type: String },
