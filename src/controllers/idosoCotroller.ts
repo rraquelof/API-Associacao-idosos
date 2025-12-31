@@ -1,15 +1,10 @@
 import { Request, Response } from "express";
 import Idoso from "../models/idoso";
 import { createIdosoSchema } from "../validations/idosoValidations";
-import { limparPayload } from "../utils/limparPayload";
 
 
 export const createIdoso = async (req: Request, res: Response) => {
-
-  // Limpa o payload removendo campos vazios
-  const payloadLimpo = limparPayload(req.body);
-
-  const data = createIdosoSchema.parse(payloadLimpo);
+  const data = createIdosoSchema.parse(req.body);
 
   const cpfExists = await Idoso.findOne({ cpf: data.cpf });
   if (cpfExists) return res.status(400).json({ message: "CPF já está cadastrado" });
@@ -43,11 +38,10 @@ export const getIdosoById = async (req: Request, res: Response) => {
   res.status(200).json(idoso);
 };
 
+
 export const updateIdoso = async (req: Request, res: Response) => {
   const { id } = req.params;
-
-  const payloadLimpo = limparPayload(req.body);
-  const data = createIdosoSchema.partial().parse(payloadLimpo);
+  const data = createIdosoSchema.partial().parse(req.body);
 
   const idosoUpdate = await Idoso.findByIdAndUpdate(id, data, { new: true });
 
