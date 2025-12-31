@@ -1,11 +1,15 @@
 import { Request, Response } from "express";
 import Idoso from "../models/idoso";
 import { createIdosoSchema } from "../validations/idosoValidations";
+import { limparPayload } from "../utils/limparPayload";
 
 
 export const createIdoso = async (req: Request, res: Response) => {
-  const data = createIdosoSchema.parse(req.body);
-  console.log("📩 RECEBIDO DO FRONT NO POST:", req.body);
+
+  // Limpa o payload removendo campos vazios
+  const payloadLimpo = limparPayload(req.body);
+
+  const data = createIdosoSchema.parse(payloadLimpo);
 
   const cpfExists = await Idoso.findOne({ cpf: data.cpf });
   if (cpfExists) return res.status(400).json({ message: "CPF já está cadastrado" });

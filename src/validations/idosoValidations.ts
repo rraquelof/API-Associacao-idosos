@@ -1,84 +1,120 @@
-import { z } from 'zod'
+import { z } from "zod";
 
 const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
 const rgRegex = /^\d{1}\.\d{3}\.\d{3}$/;
 const susRegex = /^\d{15}$/;
 
+const optionalString = () =>
+  z.preprocess(
+    (val) => (val === "" ? undefined : val),
+    z.string().optional()
+  );
+
+const optionalDateString = () =>
+  z.preprocess(
+    (val) => (val === "" ? undefined : val),
+    z.string().optional().refine(
+      (date) => !date || !isNaN(Date.parse(date)),
+      { message: "Data inválida" }
+    )
+  );
+
 export const createIdosoSchema = z.object({
-    nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
-    cpf: z.string().regex(cpfRegex, "Formato CPF inválido. Formato esperado: xxx.xxx.xxx-xx"),
-    rg: z.string().regex(rgRegex, "Formato RG inválido. Formato esperado: x.xxx.xxx"),
-    sus: z.string().regex(susRegex, "Formato SUS inválido. Cartão SUS deve conter 15 dígitos"),
-    dataNascimento: z.string().refine((date) => !isNaN(Date.parse(date)), { message: "Data de nascimento inválida" }),
-    sexo: z.enum(['masculino', 'feminino'], "Sexo deve ser 'masculino' ou 'feminino'"),
-    nacionalidade: z.string().min(3, "Nacionalidade deve ter pelo menos 3 caracteres"),
-    naturalidade: z.string().min(3, "Naturalidade deve ter pelo menos 3 caracteres"),
-    
-    // Campos opcionais
-    foto: z.string().optional(),
-    nomePai: z.string().optional(),
-    nomeMae: z.string().optional(),
-    responsavel: z.string().optional(),
-    ultimoEnderecoDoAcolhido: z.string().optional(),
-    cidade: z.string().optional(),
-    contato: z.string().optional(),
-    numCertidaoNascimento: z.string().optional(),
-    folha: z.string().optional(),
-    livro: z.string().optional(),
-    cartorio: z.string().optional(),
-    dataEmissaoRg: z.string().optional().refine((date) => !date || !isNaN(Date.parse(date)), {message: "Data de emissão inválida",}),
-    orgaoEmissorRg: z.string().optional(),
-    ctps: z.string().optional(),
-    serie: z.string().optional(),
-    pis: z.string().optional(),
-    tituloEleitor: z.string().optional(),
-    observacoes: z.string().optional(),
+  //Campos Obrigatórios
+  nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
+  cpf: z.string().regex(cpfRegex, "Formato CPF inválido"),
 
-    dataAcolhimento: z.string().optional().refine((date) => !date || !isNaN(Date.parse(date)), { message: "Data de acolhimento inválida" }),
-    localAcolhimento: z.string().optional(),
-    encaminhadoPor: z.string().optional(),
-    motivoDoAcolhimentoConformeOrgaoEmissor: z.string().optional(),
-    documentacaoRecebida: z.string().optional(),
-    condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: z.string().optional(),
-    condicoesDeHigieneNoMomentoDoAcolhimento: z.string().optional(),
-    reacoesEComportamentos: z.string().optional(),
-    sinasDeViolencia: z.string().optional(),
+  //Campos Opcionais
+  rg: optionalString().refine(
+    (v) => !v || rgRegex.test(v),
+    "Formato RG inválido"
+  ),
 
-    instituicaoAcolhimentoAnterior: z.string().optional(),
-    dataEntradaAcolhimentoAnterior: z.string().optional().refine((date) => !date || !isNaN(Date.parse(date)), { message: "Data de entrada inválida" }),
-    dataSaidaAcolhimentoAnterior: z.string().optional().refine((date) => !date || !isNaN(Date.parse(date)), { message: "Data de saída inválida" }),
-    motivoAcolhimentoAnterior: z.string().optional(),
-    motivoDesacolhimentoAnterior: z.string().optional(),
-    encaminhamentosFamiliaAnteriormenteAoAcolhimento: z.string().optional(),
+  sus: optionalString().refine(
+    (v) => !v || susRegex.test(v),
+    "Formato SUS inválido"
+  ),
 
-    arranjoFamiliar: z.string().optional(),
-    familiaAmpliada: z.string().optional(),
-    interessadosNoIdoso: z.string().optional(),
-    programaSocialDaFamilia: z.string().optional(),
-    familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticia: z.string().optional(),
-    infraestutura: z.string().optional(),
-    condicoesDeHabilidade: z.string().optional(),
-    infraestruturaDeComunidade: z.string().optional(),
-    familiaAtendidaPorServicosDeSaude: z.string().optional(),
-    relacaoComFamilia: z.string().optional(),
-    percepcaoDaFamiliaSobreIdoso: z.string().optional(),
-    percepcaoIdosoSobreFamilia: z.string().optional(),
-    percepcaoEquipeTecnicaSobreRelacaoFamiliar: z.string().optional(),
+  dataNascimento: optionalDateString(),
 
-    IdosoRecebeVisita:  z.union([z.string(), z.boolean()])
-    .optional()
-    .transform((v) => {
-        if (typeof v === "boolean") return v ? "sim" : "não";
-        return v;
-    }),
-    comportamentosIdosoDuranteVisita: z.string().optional(),
-    comportamentosFamiliaresDuranteVisita: z.string().optional(),
+  sexo: z
+    .preprocess(
+      (v) => (v === "" ? undefined : v),
+      z.enum(["masculino", "feminino"]).optional()
+    ),
 
-    nomeIrmaos: z.string().optional(),
-    idadeIrmaos: z.string().optional(),
-    localIrmaos: z.string().optional(),
+  nacionalidade: optionalString(),
+  naturalidade: optionalString(),
 
-    parecerEquipeTecnica: z.string().optional(),
+  foto: optionalString(),
+  nomePai: optionalString(),
+  nomeMae: optionalString(),
+  responsavel: optionalString(),
+  ultimoEnderecoDoAcolhido: optionalString(),
+  cidade: optionalString(),
+  contato: optionalString(),
+  numCertidaoNascimento: optionalString(),
+  folha: optionalString(),
+  livro: optionalString(),
+  cartorio: optionalString(),
+
+  dataEmissaoRg: optionalDateString(),
+  orgaoEmissorRg: optionalString(),
+
+  ctps: optionalString(),
+  serie: optionalString(),
+  pis: optionalString(),
+  tituloEleitor: optionalString(),
+  observacoes: optionalString(),
+
+  dataAcolhimento: optionalDateString(),
+  localAcolhimento: optionalString(),
+  encaminhadoPor: optionalString(),
+  motivoDoAcolhimentoConformeOrgaoEmissor: optionalString(),
+  documentacaoRecebida: optionalString(),
+  condicoesEmQueOcorreuRetiradaDoIdosoDaFamilia: optionalString(),
+  condicoesDeHigieneNoMomentoDoAcolhimento: optionalString(),
+  reacoesEComportamentos: optionalString(),
+  sinasDeViolencia: optionalString(),
+
+  instituicaoAcolhimentoAnterior: optionalString(),
+  dataEntradaAcolhimentoAnterior: optionalDateString(),
+  dataSaidaAcolhimentoAnterior: optionalDateString(),
+  motivoAcolhimentoAnterior: optionalString(),
+  motivoDesacolhimentoAnterior: optionalString(),
+  encaminhamentosFamiliaAnteriormenteAoAcolhimento: optionalString(),
+
+  arranjoFamiliar: optionalString(),
+  familiaAmpliada: optionalString(),
+  interessadosNoIdoso: optionalString(),
+  programaSocialDaFamilia: optionalString(),
+  familiaresPossuemRendaDeAtividadeLaboralOuPensaoAlimenticia: optionalString(),
+  infraestutura: optionalString(),
+  condicoesDeHabilidade: optionalString(),
+  infraestruturaDeComunidade: optionalString(),
+  familiaAtendidaPorServicosDeSaude: optionalString(),
+  relacaoComFamilia: optionalString(),
+  percepcaoDaFamiliaSobreIdoso: optionalString(),
+  percepcaoIdosoSobreFamilia: optionalString(),
+  percepcaoEquipeTecnicaSobreRelacaoFamiliar: optionalString(),
+
+  IdosoRecebeVisita: z
+    .preprocess(
+      (v) => (v === "" ? undefined : v),
+      z.union([z.string(), z.boolean()]).optional()
+    )
+    .transform((v) =>
+      typeof v === "boolean" ? (v ? "sim" : "não") : v
+    ),
+
+  comportamentosIdosoDuranteVisita: optionalString(),
+  comportamentosFamiliaresDuranteVisita: optionalString(),
+
+  nomeIrmaos: optionalString(),
+  idadeIrmaos: optionalString(),
+  localIrmaos: optionalString(),
+
+  parecerEquipeTecnica: optionalString(),
 });
 
 export type CreateIdosoDTO = z.infer<typeof createIdosoSchema>;
