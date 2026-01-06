@@ -1,16 +1,17 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { required } from "zod/v4/core/util.cjs";
 
 export interface IIdoso extends Document {
   nome: string;
   cpf: string;
-  rg?: string;
+  rg: string;
   dataEmissaoRg?: Date;
   orgaoEmissorRg?: string;
-  sus?: string;
-  dataNascimento?: Date;
-  sexo?: string;
-  nacionalidade?: string;
-  naturalidade?: string;
+  sus: string;
+  dataNascimento: Date;
+  sexo: string;
+  nacionalidade: string;
+  naturalidade: string;
   foto?: string;
   nomePai?: string;
   nomeMae?: string;
@@ -88,14 +89,14 @@ const idosoSchema: Schema = new Schema(
     // Dados básicos
     nome: { type: String, required: true },
     cpf: { type: String, required: true, unique: true },
-    rg: { type: String, unique: true },
+    rg: { type: String, unique: true, required: true },
     dataEmissaoRg: { type: Date},
     orgaoEmissorRg: { type: String},
-    sus: { type: String, unique: true },
-    dataNascimento: { type: Date},
-    sexo: { type: String},
-    nacionalidade: { type: String},
-    naturalidade: { type: String},
+    sus: { type: String, unique: true, required: true },
+    dataNascimento: { type: Date, required: true },
+    sexo: { type: String, required: true },
+    nacionalidade: { type: String, required: true },
+    naturalidade: { type: String, required: true },
 
     // Dados complementares
     foto: { type: String },

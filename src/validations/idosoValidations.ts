@@ -7,20 +7,14 @@ const susRegex = /^\d{15}$/;
 export const createIdosoSchema = z.object({
   nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
   cpf: z.string().regex(cpfRegex, "Formato CPF inválido. Formato esperado: xxx.xxx.xxx-xx"),
- 
+  rg: z.string().regex(rgRegex, "Formato RG inválido. Formato esperado: x.xxx.xxx"),
+  sus: z.string().regex(susRegex, "Formato SUS inválido. Cartão SUS deve conter 15 dígitos"),
+  dataNascimento: z.string(),
+  sexo: z.enum(["masculino", "feminino"]),
+  nacionalidade: z.string().min(3, "A nacionalidade deve ter pelo menos 3 caracteres"),
+  naturalidade: z.string().min(3, "A naturalidade deve ter pelo menos 3 caracteres"),
+
   // Campos opcionais
-   rg: z.string().optional().refine((v) => v === undefined || rgRegex.test(v), {
-      message: "Formato RG inválido. Formato esperado: x.xxx.xxx",
-    }),
-  sus: z.string().optional().refine((v) => v === undefined || susRegex.test(v), {
-      message: "Formato SUS inválido. Cartão SUS deve conter 15 dígitos",
-    }),
-  dataNascimento: z.string().optional().refine((v) => v === undefined || !isNaN(Date.parse(v)), {
-      message: "Data de nascimento inválida",
-    }),
-  sexo: z.enum(["masculino", "feminino"]).optional(),
-  nacionalidade: z.string().optional(),
-  naturalidade: z.string().optional(),
   foto: z.string().optional(),
   nomePai: z.string().optional(),
   nomeMae: z.string().optional(),
