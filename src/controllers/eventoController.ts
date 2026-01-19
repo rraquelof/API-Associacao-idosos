@@ -49,7 +49,7 @@ export const getEvento = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Nenhum evento encontrado"});
   }
     const host = req.protocol + '://' + req.get('host'); // http://localhost:3000
-  const eventosComLink = evento.map(e => ({
+  const eventosComLink = evento.map((e: any) => ({
     ...e.toObject(), // converte de mongoose document para objeto JS
     imagem: e.imagem ? `${host}${e.imagem}` : null
   }));
