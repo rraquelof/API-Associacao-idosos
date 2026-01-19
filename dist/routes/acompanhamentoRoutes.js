@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const autenticacaoMiddleware_1 = require("../middlewares/autenticacaoMiddleware");
+const acompanhamentoController_1 = require("../controllers/acompanhamentoController");
+const verificarUser_1 = require("../middlewares/verificarUser");
+const router = (0, express_1.Router)();
+router.use(autenticacaoMiddleware_1.authenticate);
+router.post("/cadastrarAcompanhamento", autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, acompanhamentoController_1.createAcompanhamento);
+router.get("/acompanhamentos", autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, acompanhamentoController_1.getAllAcompanhamentos);
+router.get("/acompanhamento/:id", autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, acompanhamentoController_1.getAcompanhamentosById);
+router.delete("/acompanhamento/:id", autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, acompanhamentoController_1.deleteAcompanhamento);
+router.put("/acompanhamento/:id", autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, acompanhamentoController_1.updateAcompanhamento);
+exports.default = router;

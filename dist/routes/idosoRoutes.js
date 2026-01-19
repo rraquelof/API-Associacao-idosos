@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const idosoCotroller_1 = require("../controllers/idosoCotroller");
+const autenticacaoMiddleware_1 = require("../middlewares/autenticacaoMiddleware");
+const verificarUser_1 = require("../middlewares/verificarUser");
+const routerIdoso = (0, express_1.Router)();
+routerIdoso.post('/cadastrarIdoso', autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, idosoCotroller_1.createIdoso);
+routerIdoso.get('/idosos', autenticacaoMiddleware_1.authenticate, idosoCotroller_1.getIdosos);
+routerIdoso.get('/idoso/:id', autenticacaoMiddleware_1.authenticate, idosoCotroller_1.getIdosoById);
+routerIdoso.put('/idoso/:id', autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, idosoCotroller_1.updateIdoso);
+routerIdoso.delete('/idoso/:id', autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, idosoCotroller_1.deleteIdoso);
+exports.default = routerIdoso;

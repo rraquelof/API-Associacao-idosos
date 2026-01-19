@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const eventoController_1 = require("../controllers/eventoController");
+const autenticacaoMiddleware_1 = require("../middlewares/autenticacaoMiddleware");
+const multer_1 = require("../config/multer");
+const verificarUser_1 = require("../middlewares/verificarUser");
+const routerEvento = (0, express_1.Router)();
+routerEvento.post('/cadastroEvento', autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, multer_1.upload.single("imagem"), eventoController_1.createEvento);
+routerEvento.put('/eventos/:id/idosos', autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, eventoController_1.addIdososEmEvento);
+routerEvento.get('/eventos', autenticacaoMiddleware_1.authenticate, eventoController_1.getEvento);
+routerEvento.get('/eventos/:id', autenticacaoMiddleware_1.authenticate, eventoController_1.getEventoById);
+routerEvento.put('/eventos/:id', autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, eventoController_1.updateEvento);
+routerEvento.delete('/eventos/:id', autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyCoordenador, eventoController_1.deleteEvento);
+exports.default = routerEvento;

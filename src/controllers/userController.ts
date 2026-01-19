@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { ZodError } from "zod";
-import Usuario from "../models/usuario";
+import Usuario from "../models/Usuario";
 import { createUserSchema, loginSchema } from "../validations/userValidations";
 
 export const createUser = async (req: Request, res: Response) => {
