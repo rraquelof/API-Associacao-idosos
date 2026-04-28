@@ -1245,6 +1245,210 @@
           }
         }
       }
+    },
+"/visita": {
+      "post": {
+        "summary": "Cadastrar uma nova visita",
+        "tags": [
+          "Visitas"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Visita"
+              },
+              "examples": {
+                "Exemplo1": {
+                  "summary": "Exemplo de cadastro de visita",
+                  "value": {
+                    "nome": "Carlos Roberto",
+                    "telefone": "83988776655"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Visita criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visita"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação"
+          },
+          "401": {
+            "description": "Token não fornecido ou inválido"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/visitas": {
+      "get": {
+        "summary": "Listar todas as visitas",
+        "tags": [
+          "Visitas"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "query",
+            "required": false,
+            "description": "Filtrar visitas por uma data específica",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de visitas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Visita"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token não fornecido ou inválido"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/visita/{id}": {
+      "put": {
+        "summary": "Atualizar os dados de uma visita",
+        "tags": [
+          "Visitas"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da visita",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Visita"
+              },
+              "examples": {
+                "ExemploAtualizacao": {
+                  "summary": "Atualizando nome e telefone",
+                  "value": {
+                    "nome": "Carlos Roberto Atualizado",
+                    "telefone": "83000000000"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Visita atualizada com sucesso"
+          },
+          "401": {
+            "description": "Token não fornecido ou inválido"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+          },
+          "404": {
+            "description": "Visita não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remover uma visita",
+        "tags": [
+          "Visitas"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID da visita",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Visita removida com sucesso"
+          },
+          "401": {
+            "description": "Token não fornecido ou inválido"
+          },
+          "403": {
+            "description": "Acesso negado: apenas coordenadores podem realizar esta ação."
+          },
+          "404": {
+            "description": "Visita não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1409,6 +1613,31 @@
         "required": ["usuarioId","idosoId","altura","peso","pressao","estadoNutricional"]
       }
     },
+    "Visita": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID gerado automaticamente pelo MongoDB"
+          },
+          "nome": {
+            "type": "string",
+            "description": "Nome do visitante"
+          },
+          "data": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data e hora da visita. Padrão é a data atual."
+          },
+          "telefone": {
+            "type": "string",
+            "description": "Telefone de contato do visitante"
+          }
+        },
+        "required": [
+          "nome"
+        ]
+      },
     "securitySchemes": {
       "BearerAuth": {
         "type": "http",

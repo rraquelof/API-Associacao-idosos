@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const createVisitaSchema = z.object({
     nome: z.string().min(3, "Nome deve ter ao menos 3 caracteres"),
-    data: z.date().optional(), 
+    data: z.coerce.date().optional(),
     telefone: z.string().optional()
 });
 
