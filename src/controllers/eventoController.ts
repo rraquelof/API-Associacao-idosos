@@ -28,18 +28,19 @@ export const createEvento = async (req: Request, res: Response) => {
 
 export const addIdososEmEvento = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { idosos } = req.body; //arrays de id dos idosos
+  const { idosos } = req.body; 
 
   const evento = await Evento.findByIdAndUpdate(
     id,
-    { $addToSet: {idosos: { $each: idosos} } }, //evitar duplicidade
-    { new: true}
+    { $set: { idosos: idosos } }, 
+    { new: true }
   ).populate("idosos");
     
   if(!evento){
-    res.status(404).json({ message: "Nenhum evento encontrado" });
+    return res.status(404).json({ message: "Nenhum evento encontrado" }); 
   }
-  res.status(200).json({ message: "Idoso adicionado com sucesso", evento});
+  
+  res.status(200).json({ message: "Lista de participantes atualizada com sucesso", evento });
 }
 
 export const getEvento = async (req: Request, res: Response) => {
