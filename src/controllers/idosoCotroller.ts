@@ -2,9 +2,14 @@ import { Request, Response } from "express";
 import Idoso from "../models/idoso";
 import { createIdosoSchema } from "../validations/idosoValidations";
 
-
 export const createIdoso = async (req: Request, res: Response) => {
-  const data = createIdosoSchema.parse(req.body);
+  let body: any = { ...req.body };
+
+  if (req.file) {
+    body.foto = `/uploads/${req.file.filename}`;
+  }
+
+  const data = createIdosoSchema.parse(body);
 
   const cpfExists = await Idoso.findOne({ cpf: data.cpf });
   if (cpfExists) return res.status(400).json({ message: "CPF já está cadastrado" });
