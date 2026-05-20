@@ -9,8 +9,8 @@ const routerEvento = Router();
 routerEvento.post('/cadastroEvento', authenticate, verifyCoordenador, upload.single("imagem"), createEvento);
 routerEvento.put('/eventos/:id/idosos', authenticate, verifyCoordenador, addIdososEmEvento);
 routerEvento.get('/eventos', authenticate, getEvento);
-routerEvento.get('/eventos/:id',authenticate, getEventoById );
-routerEvento.put('/eventos/:id', authenticate, verifyCoordenador, updateEvento);
-routerEvento.delete('/eventos/:id',authenticate, verifyCoordenador, deleteEvento);
+routerEvento.get('/eventos/:id', authenticate, getEventoById);
+routerEvento.put('/eventos/:id', authenticate, verifyCoordenador, upload.single("imagem"), updateEvento);
+routerEvento.delete('/eventos/:id', authenticate, verifyCoordenador, deleteEvento);
 
 export default routerEvento;

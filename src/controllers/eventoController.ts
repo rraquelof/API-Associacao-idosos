@@ -67,16 +67,27 @@ export const getEventoById = async (req: Request, res: Response) =>{
 }
 
 export const updateEvento = async (req: Request, res: Response) => {
+  let body: any = { ...req.body };
+
+  if (body.local && typeof body.local === "string") {
+    body.local = JSON.parse(body.local);
+  }
+
+  if (req.file) {
+    body.imagem = `/uploads/${req.file.filename}`;
+  }
+
   const evento = await Evento.findByIdAndUpdate(
     req.params.id, 
-    req.body,
-    { new:true }
+    body,
+    { new: true }
   );
 
-  if(!evento){
-    res.status(404).json("Evento não encontrado.");
+  if (!evento) {
+    return res.status(404).json("Evento não encontrado.");
   }
-  res.status(200).json({message: "Evento atualizado com sucesso!", evento});
+  
+  res.status(200).json({ message: "Evento atualizado com sucesso!", evento });
 }
 
 export const deleteEvento = async(req: Request, res: Response) => {
