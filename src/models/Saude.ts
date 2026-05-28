@@ -22,7 +22,7 @@ const saudeSchema = new Schema<ISaude>(
     peso: { type: Number, required: true },
     pressao: { type: String, required: true },
     alergias: { type: [String], default: [] },
-    glicemia: { type: Number, required: true },
+    glicemia: { type: Number },
     doencasCronicas: { type: [String], default: [] },
     estadoNutricional: { type: String, enum: ['normal', 'baixo peso', 'sobrepeso'], required: true},
   },
