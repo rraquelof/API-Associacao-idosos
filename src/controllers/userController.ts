@@ -22,7 +22,7 @@ export const createUser = async (req: Request, res: Response) => {
 };
 
 export const getUsers = async (req: Request, res: Response) => {
-    const users = await Usuario.find().select("-senha"); // não retorna senha
+    const users = await Usuario.find().select("-senha");
     res.status(200).json(users);
 };
 

@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { required } from "zod/v4/core/util.cjs";
 
 export interface IIdoso extends Document {
   nome: string;

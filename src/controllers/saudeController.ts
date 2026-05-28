@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Idoso from "../models/idoso";
-import Saude from "../models/Saude";
+import Saude from "../models/saude";
 import { createSaudeSchema } from "../validations/saudeValidations";
 
 export const createSaude = async (req: Request, res: Response) => {
@@ -23,7 +23,9 @@ export const createSaude = async (req: Request, res: Response) => {
 }
 
 export const getSaude = async (req: Request, res: Response) => {
-  const consultas = await Saude.find().sort({ dataConsulta: -1 });
+  const consultas = await Saude.find()
+    .sort({ dataConsulta: -1 })
+    .populate("idosoId", "nome"); 
 
   if (consultas.length === 0) {
     return res.status(404).json({ message: "Nenhum registro de consulta encontrado." });
