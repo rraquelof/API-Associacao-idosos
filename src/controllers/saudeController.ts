@@ -24,7 +24,6 @@ export const createSaude = async (req: Request, res: Response) => {
 
 export const getSaude = async (req: Request, res: Response) => {
   const consultas = await Saude.find()
-    .sort({ dataConsulta: -1 })
     .populate("idosoId", "nome"); 
 
   if (consultas.length === 0) {
@@ -36,7 +35,9 @@ export const getSaude = async (req: Request, res: Response) => {
 
 export const getSaudeById = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const consulta = await Saude.findById(id);
+  const consulta = await Saude.findById(id)
+    .populate("idosoId", "nome")
+    .populate("usuarioId", "nome");
 
   if (!consulta) {
     return res
@@ -60,7 +61,6 @@ export const putSaude = async (req: Request, res: Response) => {
   return res.status(200).json({ message: "Atualizado com sucesso!", consulta });
 }
 
-// Essa função irá excluir apenas a consulta em específico
 export const deleteSaude = async (req: Request, res: Response) => {
   const { id } = req.params;
   const consulta = await Saude.findByIdAndDelete(id);
