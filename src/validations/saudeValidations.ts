@@ -3,13 +3,13 @@ import { z } from "zod";
 export const createSaudeSchema = z.object({
   usuarioId: z.string(),
   idosoId: z.string(),
-  dataConsulta: z.string().optional(), // geralmente vem default
-  altura: z.number().positive("Altura deve ser maior que zero").optional(),
-  peso: z.number().positive("Peso deve ser maior que zero").optional(),
+  dataConsulta: z.string().optional(), 
+  altura: z.number().positive("Altura deve ser maior que zero"),
+  peso: z.number().positive("Peso deve ser maior que zero"),
   pressao: z.string().regex(/^\d{2,3}\/\d{2,3}$/, "Pressão deve estar no formato xxx/xx"),
   alergias: z.string().optional(),
-  glicemia: z.number().nonnegative("Glicemia não pode ser negativa").optional(),
-  doencasCronicas: z.string().optional(),
+  glicemia: z.number().nonnegative("Glicemia não pode ser negativa"),
+  doencasCronicas: z.string(),
   estadoNutricional: z.string().optional(),
 });
 
