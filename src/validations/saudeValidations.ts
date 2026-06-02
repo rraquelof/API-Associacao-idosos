@@ -9,8 +9,8 @@ export const createSaudeSchema = z.object({
   pressao: z.string().regex(/^\d{2,3}\/\d{2,3}$/, "Pressão deve estar no formato xxx/xx"),
   alergias: z.string().optional(),
   glicemia: z.number().nonnegative("Glicemia não pode ser negativa"),
-  doencasCronicas: z.string(),
-  estadoNutricional: z.string().optional(),
+  doencasCronicas: z.string().optional,
+  estadoNutricional: z.string(),
 });
 
 export type CreateIdosoDTO = z.infer <typeof createSaudeSchema>
