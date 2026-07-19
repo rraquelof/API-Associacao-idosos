@@ -1,13 +1,16 @@
 import { z } from "zod";
 
 const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
-const rgRegex = /^\d{1}\.\d{3}\.\d{3}$/;
+// O RG não tem tamanho fixo no Brasil (varia de 7 a 9 dígitos conforme o
+// estado emissor), então aceitamos 1 a 3 dígitos no primeiro grupo + dois
+// grupos de 3, com o dígito verificador "-X" opcional no final.
+const rgRegex = /^\d{1,3}(\.\d{3}){2}(-X)?$/;
 const susRegex = /^\d{15}$/;
 
 export const createIdosoSchema = z.object({
   nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
   cpf: z.string().regex(cpfRegex, "Formato CPF inválido. Formato esperado: xxx.xxx.xxx-xx"),
-  rg: z.string().regex(rgRegex, "Formato RG inválido. Formato esperado: x.xxx.xxx"),
+  rg: z.string().regex(rgRegex, "Formato RG inválido. Formatos aceitos: x.xxx.xxx, xx.xxx.xxx ou xxx.xxx.xxx (com -X no final se houver dígito verificador)"),
   sus: z.string().regex(susRegex, "Formato SUS inválido. Cartão SUS deve conter 15 dígitos"),
   dataNascimento: z.string(),
   sexo: z.enum(["masculino", "feminino"]),

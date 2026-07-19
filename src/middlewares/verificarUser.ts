@@ -24,3 +24,26 @@ export const verifyFamiliar = (req: Request, res: Response, next: NextFunction) 
   }
   next();
 };
+
+// Coordenador, voluntário e familiar podem agendar/gerenciar visitas
+// (o familiar precisa poder agendar a visita ao próprio idoso).
+export const verifyPodeAgendarVisita = (req: Request, res: Response, next: NextFunction) => {
+  const tiposPermitidos = ["coordenador", "voluntario", "familiar"];
+  if (!req.user || !tiposPermitidos.includes(req.user.tipo)) {
+    return res.status(403).json({
+      message: "Acesso negado: você não tem permissão para gerenciar visitas."
+    });
+  }
+  next();
+};
+
+// Enfermeiro e coordenador podem registrar/editar/excluir acompanhamento de saúde.
+export const verifyPodeRegistrarSaude = (req: Request, res: Response, next: NextFunction) => {
+  const tiposPermitidos = ["enfermeiro", "coordenador"];
+  if (!req.user || !tiposPermitidos.includes(req.user.tipo)) {
+    return res.status(403).json({
+      message: "Somente enfermeiros ou coordenadores podem realizar esta ação."
+    });
+  }
+  next();
+};

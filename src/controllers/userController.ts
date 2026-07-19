@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { ZodError } from "zod";
 import Usuario from "../models/Usuario";
-import { createUserSchema, loginSchema } from "../validations/userValidations";
+import { createUserSchema, updateUserSchema, loginSchema } from "../validations/userValidations";
 
 export const createUser = async (req: Request, res: Response) => {
         const data = createUserSchema.parse(req.body);
@@ -27,6 +27,11 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const getUserById = async (req: Request, res: Response) => {
+    // qualquer usuário pode ver o próprio perfil; só coordenador pode ver o de outros
+    if (req.user?.tipo !== "coordenador" && req.user?.id !== req.params.id) {
+      return res.status(403).json({ message: "Acesso negado" });
+    }
+
     const user = await Usuario.findById(req.params.id).select("-senha");
     if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
     res.status(200).json(user);
@@ -40,7 +45,7 @@ export const updateUser = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Acesso negado" });
     }
 
-    const updates = createUserSchema.parse(req.body);;
+    const updates = updateUserSchema.parse(req.body);
 
     if (updates.senha) {
       updates.senha = await bcrypt.hash(updates.senha, 10);
@@ -54,6 +59,11 @@ export const updateUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
     const { id } = req.params;
+
+    // qualquer usuário pode excluir a própria conta; só coordenador pode excluir a de outros
+    if (req.user?.tipo !== "coordenador" && req.user?.id !== id) {
+      return res.status(403).json({ message: "Acesso negado" });
+    }
 
     const user = await Usuario.findByIdAndDelete(id);
     if (!user) return res.status(404).json({ message: "Usuário não encontrado" });

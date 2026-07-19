@@ -9,6 +9,9 @@ export interface IUsuario extends Document {
     sexo: string
     endereco: string
     telefone: string
+    // Vincula um usuário do tipo "familiar" a um idoso específico, para que
+    // ele só tenha acesso aos dados desse idoso (e não do abrigo inteiro).
+    idosoVinculado?: Schema.Types.ObjectId
 }
 
 const usuarioSchema: Schema = new Schema({
@@ -20,6 +23,7 @@ const usuarioSchema: Schema = new Schema({
     sexo: { type: String, required: true },
     endereco: { type: String, required: true },
     telefone: { type: String, required: true },
+    idosoVinculado: { type: Schema.Types.ObjectId, ref: 'Idoso', required: false },
 }, { timestamps: true });
 
 export default mongoose.model<IUsuario>('Usuario', usuarioSchema);

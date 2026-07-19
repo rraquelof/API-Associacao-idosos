@@ -10,7 +10,12 @@ export const createUserSchema = z.object({
     sexo: z.enum(['masculino', 'feminino']),
     endereco: z.string().min(5, "Endereço deve ter ao menos 5 caracteres"),
     telefone: z.string().min(10, "Telefone deve ter ao menos 10 caracteres"),
+    idosoVinculado: z.string().optional(),
 });
+
+// Usado para atualização de perfil: todos os campos são opcionais, já que o
+// front normalmente envia só os campos que mudaram (sem senha, por exemplo).
+export const updateUserSchema = createUserSchema.partial();
 
 export const loginSchema = z.object({
     email: z.string(),

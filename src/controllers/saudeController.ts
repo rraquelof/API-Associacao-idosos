@@ -4,20 +4,17 @@ import Saude from "../models/Saude";
 import { createSaudeSchema } from "../validations/saudeValidations";
 
 export const createSaude = async (req: Request, res: Response) => {
-    const { usuarioId, idosoId } = req.body;
-  
+    const { idosoId } = req.body;
+
     const idosoExistente = await Idoso.findById(idosoId);
-    if (!idosoExistente) { 
+    if (!idosoExistente) {
         return res.status(404).json({ message: "Idoso não encontrado" });
     }
 
     const data = createSaudeSchema.parse(req.body);
- 
-    const saude = await Saude.create({
-      ...data,
-      usuario: usuarioId,
-      idoso: idosoId
-    });
+
+    // data já contém usuarioId e idosoId (validados pelo schema acima).
+    const saude = await Saude.create(data);
 
     return res.status(201).json({ message: "Acompanhamento de saúde registrado com sucesso!", saude });
 }
