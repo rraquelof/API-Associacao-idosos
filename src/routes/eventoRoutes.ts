@@ -1,0 +1,16 @@
+import { Router } from "express";
+import { addIdososEmEvento, createEvento, getEvento, getEventoById, updateEvento, deleteEvento } from "../controllers/eventoController";
+import { authenticate } from "../middlewares/autenticacaoMiddleware";
+import { upload } from "../config/multer";
+import { verifyCoordenador } from "../middlewares/verificarUser";
+
+const routerEvento = Router();
+
+routerEvento.post('/cadastroEvento', authenticate, verifyCoordenador, upload.single("imagem"), createEvento);
+routerEvento.put('/eventos/:id/idosos', authenticate, verifyCoordenador, addIdososEmEvento);
+routerEvento.get('/eventos', authenticate, getEvento);
+routerEvento.get('/eventos/:id', authenticate, getEventoById);
+routerEvento.put('/eventos/:id', authenticate, verifyCoordenador, upload.single("imagem"), updateEvento);
+routerEvento.delete('/eventos/:id', authenticate, verifyCoordenador, deleteEvento);
+
+export default routerEvento;

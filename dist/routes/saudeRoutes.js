@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const autenticacaoMiddleware_1 = require("../middlewares/autenticacaoMiddleware");
+const saudeController_1 = require("../controllers/saudeController");
+const verificarUser_1 = require("../middlewares/verificarUser");
+const routerSaude = (0, express_1.Router)();
+routerSaude.post('/cadastrarConsulta', autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyEnfermeiro, saudeController_1.createSaude);
+routerSaude.get('/saudeIdoso', autenticacaoMiddleware_1.authenticate, saudeController_1.getSaude);
+routerSaude.get('/saudeIdoso/:id', autenticacaoMiddleware_1.authenticate, saudeController_1.getSaudeById);
+routerSaude.put('/saudeIdoso/:id', autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyEnfermeiro, saudeController_1.putSaude);
+routerSaude.delete('/saudeIdoso/:id', autenticacaoMiddleware_1.authenticate, verificarUser_1.verifyEnfermeiro, saudeController_1.deleteSaude);
+exports.default = routerSaude;
