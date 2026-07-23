@@ -41,7 +41,7 @@ const eventoSchema = new mongoose.Schema({
 
     idosos: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Idoso", // referencia o model Idoso
+        ref: "Idoso",
     }]
     
 });

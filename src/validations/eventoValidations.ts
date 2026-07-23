@@ -8,8 +8,8 @@ export const createEventoSchema = z.object({
   local: z.object({
     type: z.literal("Point"),
     coordinates: z.tuple([
-      z.coerce.number(), // longitude
-      z.coerce.number()  // latitude
+      z.coerce.number(), 
+      z.coerce.number()  
     ])
   }),
   idosos: z.array(z.string()).optional()
