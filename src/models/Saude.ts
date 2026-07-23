@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, model } from "mongoose";
 
-export interface ISaude extends Document {     
+export interface ISaude extends Document {
+  usuarioId: Schema.Types.ObjectId;      
   idosoId: Schema.Types.ObjectId;        
   dataConsulta: Date;                    
   altura: number;                       
@@ -14,6 +15,7 @@ export interface ISaude extends Document {
 
 const saudeSchema = new Schema<ISaude>(
   {
+    usuarioId: { type: Schema.Types.ObjectId, ref: "Usuario", required: true },
     idosoId: { type: Schema.Types.ObjectId, ref: "Idoso", required: true },
     dataConsulta: { type: Date, default: Date.now }, 
     altura: { type: Number, required: true },
