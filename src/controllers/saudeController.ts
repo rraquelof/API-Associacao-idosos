@@ -4,24 +4,24 @@ import Saude from "../models/Saude";
 import { createSaudeSchema } from "../validations/saudeValidations";
 
 export const createSaude = async (req: Request, res: Response) => {
-    const { idosoId } = req.body;
+  const { idosoId } = req.body;
 
-    const idosoExistente = await Idoso.findById(idosoId);
-    if (!idosoExistente) {
-        return res.status(404).json({ message: "Idoso não encontrado" });
-    }
+  const idosoExistente = await Idoso.findById(idosoId);
+  if (!idosoExistente) {
+    return res.status(404).json({ message: "Idoso não encontrado" });
+  }
 
-    const data = createSaudeSchema.parse(req.body);
+  const data = createSaudeSchema.parse(req.body);
 
-    // data já contém usuarioId e idosoId (validados pelo schema acima).
-    const saude = await Saude.create(data);
+  const saude = await Saude.create(data);
 
-    return res.status(201).json({ message: "Acompanhamento de saúde registrado com sucesso!", saude });
-}
+  return res.status(201).json({ message: "Acompanhamento de saúde registrado com sucesso!", saude });
+
+};
 
 export const getSaude = async (req: Request, res: Response) => {
   const consultas = await Saude.find()
-    .populate("idosoId", "nome"); 
+    .populate("idosoId", "nome");
 
   if (consultas.length === 0) {
     return res.status(404).json({ message: "Nenhum registro de consulta encontrado." });
@@ -48,7 +48,7 @@ export const getSaudeById = async (req: Request, res: Response) => {
 export const putSaude = async (req: Request, res: Response) => {
   const { id } = req.params;
   const data = createSaudeSchema.parse(req.body);
-  
+
   const consulta = await Saude.findByIdAndUpdate(id, data, { new: true });
 
   if (!consulta) {

@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const createSaudeSchema = z.object({
-  usuarioId: z.string(),
   idosoId: z.string(),
   dataConsulta: z.string().optional(), 
   altura: z.number().positive("Altura deve ser maior que zero"),
