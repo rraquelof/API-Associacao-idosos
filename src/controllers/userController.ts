@@ -40,7 +40,6 @@ export const getUserById = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    // só coordenador OU o próprio usuário pode editar
     if (req.user?.tipo !== "coordenador" && req.user?.id !== id) {
       return res.status(403).json({ message: "Acesso negado" });
     }
@@ -60,7 +59,6 @@ export const updateUser = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    // qualquer usuário pode excluir a própria conta; só coordenador pode excluir a de outros
     if (req.user?.tipo !== "coordenador" && req.user?.id !== id) {
       return res.status(403).json({ message: "Acesso negado" });
     }

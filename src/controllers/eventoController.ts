@@ -3,24 +3,19 @@ import Evento from "../models/evento";
 import { createEventoSchema } from "../validations/eventoValidations";
 
 export const createEvento = async (req: Request, res: Response) => {
-    // Copia o body e faz parse de objetos/arrays vindos do form-data
     let body: any = { ...req.body };
 
-    // Parse do local (se veio como string JSON)
     if (body.local && typeof body.local === "string") {
       body.local = JSON.parse(body.local);
     }
     if (body.idosos && typeof body.idosos === "string") {
   body.idosos = JSON.parse(body.idosos);
 }
-    // Adiciona o caminho da imagem
     if (req.file) {
       body.imagem = `/uploads/${req.file.filename}`;
     }
-    // Valida com Zod usando o objeto já processado
-    const data = createEventoSchema.parse(body);
 
-    // Criação no MongoDB
+    const data = createEventoSchema.parse(body);
     const newEvento = await Evento.create(data);
 
     res.status(201).json({message: "Evento criado com sucesso", newEvento});
@@ -49,9 +44,9 @@ export const getEvento = async (req: Request, res: Response) => {
   if(!evento){
     return res.status(404).json({ message: "Nenhum evento encontrado"});
   }
-    const host = req.protocol + '://' + req.get('host'); // http://localhost:3000
+    const host = req.protocol + '://' + req.get('host'); 
   const eventosComLink = evento.map((e: any) => ({
-    ...e.toObject(), // converte de mongoose document para objeto JS
+    ...e.toObject(), 
     imagem: e.imagem ? `${host}${e.imagem}` : null
   }));
 

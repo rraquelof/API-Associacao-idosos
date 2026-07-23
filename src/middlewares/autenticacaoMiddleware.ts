@@ -7,9 +7,6 @@ interface DecodedToken {
   iat: number;
   exp: number;
 }
-
-// estendendo a interface Request do Express para incluir 'user'
-// Isso permite que o middleware autenticaçãoMiddleware.ts adicione o usuário decodificado ao objeto
 declare global {
   namespace Express {
     interface Request {
