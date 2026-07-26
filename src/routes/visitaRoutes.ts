@@ -6,7 +6,7 @@ import { verifyCoordenador, verifyPodeAgendarVisita } from "../middlewares/verif
 const router = express.Router();
 
 router.get("/visitas", authenticate, getVisitas);
-router.get("/visita/:id", authenticate, verifyCoordenador, getVisitaById);
+router.get("/visita/:id", authenticate, getVisitaById);
 router.post("/visita", authenticate, verifyPodeAgendarVisita, createVisita);
 router.put("/visita/:id", authenticate, verifyCoordenador, updateVisita);
 router.delete("/visita/:id", authenticate, verifyCoordenador, deleteVisita);
