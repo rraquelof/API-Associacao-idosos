@@ -898,6 +898,52 @@ async function fetchComTimeout(url, init, timeoutMs) {
         clearTimeout(timer);
     }
 }
+function selecionarModelosDiversificados(modelosOrdenados, limite = 4) {
+    const selecionados = [];
+    const basesVistas = new Set();
+    const clustersVistos = new Set();
+    const variantesVistas = new Set();
+    const analisar = (id) => {
+        const lower = id.toLowerCase();
+        const base = lower.replace(/-\d{3}$/, "");
+        const variante = lower.includes("flash-lite")
+            ? "flash-lite"
+            : lower.includes("flash")
+                ? "flash"
+                : lower.includes("pro")
+                    ? "pro"
+                    : "outro";
+        const matchVersao = lower.match(/gemini-(\d+(?:\.\d+)?)/);
+        const geracao = matchVersao ? matchVersao[1] : lower.includes("latest") ? "latest" : "outro";
+        return { base, variante, geracao, ehLatest: lower.includes("latest") };
+    };
+    for (const id of modelosOrdenados) {
+        if (selecionados.length >= limite)
+            break;
+        const { base, variante, geracao, ehLatest } = analisar(id);
+        if (basesVistas.has(base))
+            continue;
+        if (ehLatest && variantesVistas.has(variante))
+            continue;
+        const cluster = `${geracao}:${variante}`;
+        if (clustersVistos.has(cluster))
+            continue;
+        selecionados.push(id);
+        basesVistas.add(base);
+        clustersVistos.add(cluster);
+        variantesVistas.add(variante);
+    }
+    for (const id of modelosOrdenados) {
+        if (selecionados.length >= limite)
+            break;
+        const { base } = analisar(id);
+        if (basesVistas.has(base))
+            continue;
+        selecionados.push(id);
+        basesVistas.add(base);
+    }
+    return selecionados;
+}
 async function obterModelosCandidatos(apiKey) {
     const agora = Date.now();
     const emCache = cacheModelosPorChave.get(apiKey);
@@ -919,15 +965,16 @@ async function obterModelosCandidatos(apiKey) {
                 .map((m) => String(m.name).replace(/^models\//, ""));
             const estaveis = candidatos.filter((id) => !id.toLowerCase().includes("preview") && !id.toLowerCase().includes("-exp"));
             const base = estaveis.length > 0 ? estaveis : candidatos;
-            descobertos = base
-                .sort((a, b) => pontuarModeloGemini(b) - pontuarModeloGemini(a))
-                .slice(0, 3);
+            const ordenados = base.sort((a, b) => pontuarModeloGemini(b) - pontuarModeloGemini(a));
+            descobertos = selecionarModelosDiversificados(ordenados, 4);
         }
     }
     catch {
         // Falha de rede ou timeout na descoberta usa fallback padrão silenciosamente
     }
-    const selecionados = descobertos.length > 0 ? descobertos : MODELOS_FALLBACK_PADRAO.slice(0, 3);
+    const selecionados = descobertos.length > 0
+        ? descobertos
+        : [...MODELOS_FALLBACK_PADRAO, "gemini-2.0-flash"].slice(0, 4);
     cacheModelosPorChave.set(apiKey, {
         modelos: selecionados,
         expiraEm: agora + CACHE_MODELOS_TTL_MS,
@@ -940,11 +987,13 @@ function montarUrlGenerateContent(apiKey, modelo) {
 async function chamarGeminiComFallback(apiKey, payload, modeloPreferido) {
     const baseModelos = await obterModelosCandidatos(apiKey);
     const modelos = modeloPreferido
-        ? Array.from(new Set([modeloPreferido, ...baseModelos])).slice(0, 3)
-        : baseModelos.slice(0, 3);
+        ? Array.from(new Set([modeloPreferido, ...baseModelos])).slice(0, 4)
+        : baseModelos.slice(0, 4);
+    const modelosTentados = [];
     let ultimoErro = { status: 500, mensagem: "Erro ao consultar a API do Gemini.", codigo: "ERRO_GEMINI" };
     for (let i = 0; i < modelos.length; i++) {
         const modelo = modelos[i];
+        modelosTentados.push(modelo);
         const url = montarUrlGenerateContent(apiKey, modelo);
         let resposta;
         try {
@@ -992,7 +1041,7 @@ async function chamarGeminiComFallback(apiKey, payload, modeloPreferido) {
         if (resposta.status === 503) {
             ultimoErro = {
                 status: 503,
-                mensagem: `Serviço do Google Gemini temporariamente indisponível (${msgApi}). Tente novamente em instantes.`,
+                mensagem: `Serviço do Google Gemini temporariamente indisponível (${msgApi}) [modelos: ${modelosTentados.join(", ")}]. Tente novamente em instantes.`,
                 codigo: "SERVICO_INDISPONIVEL",
             };
             if (i < modelos.length - 1) {
