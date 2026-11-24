@@ -24,18 +24,11 @@ const MODELOS_FALLBACK_PADRAO = [
     "gemini-2.5-flash",
     "gemini-flash-latest",
 ];
-const MODELOS_VERTEX_EXPRESS = [
-    "gemini-2.5-flash",
-    "gemini-2.5-flash-lite",
-    "gemini-2.0-flash",
-];
 const TIMEOUT_DESCOBERTA_MS = 8000;
 const TIMEOUT_GERACAO_MS = 15000;
+const PAUSA_POS_503_MS = 1000;
 const CACHE_MODELOS_TTL_MS = 10 * 60 * 1000;
 const cacheModelosPorChave = new Map();
-function ehChaveVertexExpress(apiKey) {
-    return apiKey.trim().startsWith("AQ.");
-}
 const CAMPOS_SENSIVEIS_LGPD = new Set(["cpf", "rg", "sus", "senha"]);
 function sanitizarParaGemini(valor) {
     if (valor === null || valor === undefined)
@@ -881,7 +874,7 @@ function pontuarModeloGemini(id) {
     else if (lower.includes("pro"))
         pontos += 50;
     if (lower.includes("latest"))
-        pontos += 150;
+        pontos += 10;
     const versao = lower.match(/gemini-(\d+)(?:\.(\d+))?/);
     if (versao) {
         const maior = Number(versao[1] || 0);
@@ -906,9 +899,6 @@ async function fetchComTimeout(url, init, timeoutMs) {
     }
 }
 async function obterModelosCandidatos(apiKey) {
-    if (ehChaveVertexExpress(apiKey)) {
-        return MODELOS_VERTEX_EXPRESS;
-    }
     const agora = Date.now();
     const emCache = cacheModelosPorChave.get(apiKey);
     if (emCache && emCache.expiraEm > agora) {
@@ -945,9 +935,6 @@ async function obterModelosCandidatos(apiKey) {
     return selecionados;
 }
 function montarUrlGenerateContent(apiKey, modelo) {
-    if (ehChaveVertexExpress(apiKey)) {
-        return `https://aiplatform.googleapis.com/v1/publishers/google/models/${modelo}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    }
     return `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${encodeURIComponent(apiKey)}`;
 }
 async function chamarGeminiComFallback(apiKey, payload, modeloPreferido) {
@@ -956,7 +943,8 @@ async function chamarGeminiComFallback(apiKey, payload, modeloPreferido) {
         ? Array.from(new Set([modeloPreferido, ...baseModelos])).slice(0, 3)
         : baseModelos.slice(0, 3);
     let ultimoErro = { status: 500, mensagem: "Erro ao consultar a API do Gemini.", codigo: "ERRO_GEMINI" };
-    for (const modelo of modelos) {
+    for (let i = 0; i < modelos.length; i++) {
+        const modelo = modelos[i];
         const url = montarUrlGenerateContent(apiKey, modelo);
         let resposta;
         try {
@@ -1007,6 +995,9 @@ async function chamarGeminiComFallback(apiKey, payload, modeloPreferido) {
                 mensagem: `Serviço do Google Gemini temporariamente indisponível (${msgApi}). Tente novamente em instantes.`,
                 codigo: "SERVICO_INDISPONIVEL",
             };
+            if (i < modelos.length - 1) {
+                await new Promise((r) => setTimeout(r, PAUSA_POS_503_MS));
+            }
             continue;
         }
         if (resposta.status === 401 || resposta.status === 403) {
