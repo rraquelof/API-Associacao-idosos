@@ -19,19 +19,28 @@ const ACESSO_POR_TIPO: Record<string, PaginaComPermissao[]> = {
 };
 
 const MODELOS_FALLBACK_PADRAO = [
-  "gemini-flash-lite-latest",
-  "gemini-flash-latest",
-  "gemini-3.5-flash-lite",
-  "gemini-3.8-flash",
   "gemini-2.5-flash-lite",
   "gemini-2.5-flash",
+  "gemini-flash-latest",
 ];
 
+const MODELOS_VERTEX_EXPRESS = [
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-lite",
+  "gemini-2.0-flash",
+];
+
+const TIMEOUT_DESCOBERTA_MS = 8000;
+const TIMEOUT_GERACAO_MS = 15000;
 const CACHE_MODELOS_TTL_MS = 10 * 60 * 1000;
 const cacheModelosPorChave = new Map<
   string,
   { modelos: string[]; expiraEm: number }
 >();
+
+function ehChaveVertexExpress(apiKey: string): boolean {
+  return apiKey.trim().startsWith("AQ.");
+}
 
 const CAMPOS_SENSIVEIS_LGPD = new Set(["cpf", "rg", "sus", "senha"]);
 
@@ -1020,7 +1029,28 @@ function pontuarModeloGemini(id: string): number {
   return pontos;
 }
 
+async function fetchComTimeout(
+  url: string,
+  init: RequestInit,
+  timeoutMs: number
+): Promise<globalThis.Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => {
+    controller.abort(new Error("Tempo limite excedido."));
+  }, timeoutMs);
+
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function obterModelosCandidatos(apiKey: string): Promise<string[]> {
+  if (ehChaveVertexExpress(apiKey)) {
+    return MODELOS_VERTEX_EXPRESS;
+  }
+
   const agora = Date.now();
   const emCache = cacheModelosPorChave.get(apiKey);
   if (emCache && emCache.expiraEm > agora) {
@@ -1029,15 +1059,17 @@ async function obterModelosCandidatos(apiKey: string): Promise<string[]> {
 
   let descobertos: string[] = [];
   try {
-    const resp = await fetch(
+    const resp = await fetchComTimeout(
       `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(
         apiKey
-      )}`
+      )}`,
+      { method: "GET" },
+      TIMEOUT_DESCOBERTA_MS
     );
     if (resp.ok) {
       const dados: any = await resp.json();
       const lista = Array.isArray(dados?.models) ? dados.models : [];
-      descobertos = lista
+      const candidatos = lista
         .filter(
           (m: any) =>
             typeof m?.name === "string" &&
@@ -1048,41 +1080,78 @@ async function obterModelosCandidatos(apiKey: string): Promise<string[]> {
               m.name
             )
         )
-        .map((m: any) => String(m.name).replace(/^models\//, ""))
-        .sort((a: string, b: string) => pontuarModeloGemini(b) - pontuarModeloGemini(a));
+        .map((m: any) => String(m.name).replace(/^models\//, ""));
+
+      const estaveis = candidatos.filter(
+        (id: string) =>
+          !id.toLowerCase().includes("preview") && !id.toLowerCase().includes("-exp")
+      );
+      const base = estaveis.length > 0 ? estaveis : candidatos;
+      descobertos = base
+        .sort((a: string, b: string) => pontuarModeloGemini(b) - pontuarModeloGemini(a))
+        .slice(0, 3);
     }
   } catch {
-    // Falha de rede na descoberta usa fallback padrão silenciosamente
+    // Falha de rede ou timeout na descoberta usa fallback padrão silenciosamente
   }
 
-  const combinados = Array.from(
-    new Set([...descobertos, ...MODELOS_FALLBACK_PADRAO])
-  ).slice(0, 6);
+  const selecionados =
+    descobertos.length > 0 ? descobertos : MODELOS_FALLBACK_PADRAO.slice(0, 3);
 
   cacheModelosPorChave.set(apiKey, {
-    modelos: combinados,
+    modelos: selecionados,
     expiraEm: agora + CACHE_MODELOS_TTL_MS,
   });
 
-  return combinados;
+  return selecionados;
+}
+
+function montarUrlGenerateContent(apiKey: string, modelo: string): string {
+  if (ehChaveVertexExpress(apiKey)) {
+    return `https://aiplatform.googleapis.com/v1/publishers/google/models/${modelo}:generateContent?key=${encodeURIComponent(
+      apiKey
+    )}`;
+  }
+  return `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${encodeURIComponent(
+    apiKey
+  )}`;
 }
 
 async function chamarGeminiComFallback(
   apiKey: string,
-  payload: Record<string, unknown>
+  payload: Record<string, unknown>,
+  modeloPreferido?: string
 ): Promise<{ ok: true; dados: any; modelo: string } | { ok: false; status: number; mensagem: string; codigo: string }> {
-  const modelos = await obterModelosCandidatos(apiKey);
+  const baseModelos = await obterModelosCandidatos(apiKey);
+  const modelos = modeloPreferido
+    ? Array.from(new Set([modeloPreferido, ...baseModelos])).slice(0, 3)
+    : baseModelos.slice(0, 3);
+
   let ultimoErro = { status: 500, mensagem: "Erro ao consultar a API do Gemini.", codigo: "ERRO_GEMINI" };
 
   for (const modelo of modelos) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${encodeURIComponent(
-      apiKey
-    )}`;
-    const resposta = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    const url = montarUrlGenerateContent(apiKey, modelo);
+    let resposta: globalThis.Response;
+
+    try {
+      resposta = await fetchComTimeout(
+        url,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+        TIMEOUT_GERACAO_MS
+      );
+    } catch {
+      ultimoErro = {
+        status: 504,
+        mensagem:
+          "Tempo limite excedido ao aguardar resposta do Google Gemini. Tente novamente em instantes.",
+        codigo: "TIMEOUT_GEMINI",
+      };
+      continue;
+    }
 
     if (resposta.ok) {
       const dados = await resposta.json();
@@ -1245,15 +1314,21 @@ export const conversarComAgente = async (req: Request, res: Response) => {
     };
 
     let modeloUtilizado = MODELOS_FALLBACK_PADRAO[0];
+    let modeloAtivo: string | undefined;
     let respostaTexto = "";
+    const chamadasExecutadas = new Set<string>();
 
-    for (let rodada = 0; rodada < 4; rodada++) {
-      const resultadoGemini = await chamarGeminiComFallback(apiKey, {
-        systemInstruction,
-        contents,
-        tools: [{ functionDeclarations: declaracoes }],
-        generationConfig: { temperature: 0.1 },
-      });
+    for (let rodada = 0; rodada < 3; rodada++) {
+      const resultadoGemini = await chamarGeminiComFallback(
+        apiKey,
+        {
+          systemInstruction,
+          contents,
+          tools: [{ functionDeclarations: declaracoes }],
+          generationConfig: { temperature: 0.1 },
+        },
+        modeloAtivo
+      );
 
       if (!resultadoGemini.ok) {
         return res.status(resultadoGemini.status).json({
@@ -1263,6 +1338,7 @@ export const conversarComAgente = async (req: Request, res: Response) => {
       }
 
       modeloUtilizado = resultadoGemini.modelo;
+      modeloAtivo = resultadoGemini.modelo;
       const candidato = resultadoGemini.dados?.candidates?.[0];
       const parts: any[] = candidato?.content?.parts || [];
       const chamadas = parts.filter((p) => p.functionCall);
@@ -1274,6 +1350,36 @@ export const conversarComAgente = async (req: Request, res: Response) => {
           .trim();
         break;
       }
+
+      const chavesChamadas = chamadas.map(
+        (p) => `${p.functionCall.name}:${JSON.stringify(p.functionCall.args || {})}`
+      );
+      const todasRepetidas = chavesChamadas.every((k) => chamadasExecutadas.has(k));
+
+      if (todasRepetidas) {
+        const resumoFinal = await chamarGeminiComFallback(
+          apiKey,
+          {
+            systemInstruction,
+            contents,
+            tools: [{ functionDeclarations: declaracoes }],
+            toolConfig: { functionCallingConfig: { mode: "NONE" } },
+            generationConfig: { temperature: 0.1 },
+          },
+          modeloAtivo
+        );
+        if (resumoFinal.ok) {
+          const partesFinais: any[] =
+            resumoFinal.dados?.candidates?.[0]?.content?.parts || [];
+          respostaTexto = partesFinais
+            .map((p) => p.text || "")
+            .join("\n")
+            .trim();
+        }
+        break;
+      }
+
+      chavesChamadas.forEach((k) => chamadasExecutadas.add(k));
 
       contents.push({
         role: "model",
